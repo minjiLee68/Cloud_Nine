@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "663795222322",
+    "project_id": "attendance-project-sophia",
+    "storage_bucket": "attendance-project-sophia.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663795222322:android:0f0976882e13db1791792b",
+        "android_client_info": {
+          "package_name": "com.sophia.project_minji"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663795222322-piv964jnt4ufnrpcdr9c9be9lst70dp2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9OhOp_qO8wU-2wzpV62jRCTQd9Pl0H80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663795222322-piv964jnt4ufnrpcdr9c9be9lst70dp2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

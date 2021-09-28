@@ -1,0 +1,2 @@
+rootProject.name = "Project_minji"
+include ':app'

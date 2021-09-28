@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/student"
+        android:icon="@drawable/ic_student"
+        android:title="Student" />
+    <item
+        android:id="@+id/message"
+        android:icon="@drawable/ic_speech_bubble"
+        android:title="Message" />
+    <item
+        android:id="@+id/calendar"
+        android:icon="@drawable/ic_calendar"
+        android:title="Calendar" />
+    <item
+        android:id="@+id/mypage"
+        android:icon="@drawable/ic_mypage"
+        android:title="MyPage" />
+</menu>
