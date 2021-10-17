@@ -1,24 +1,19 @@
-package com.sophia.project_minji.fragment
+package com.sophia.project_minji.dialog
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.graphics.toColor
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sophia.project_minji.adapter.TodoAdapter
 import com.sophia.project_minji.databinding.CalendarFragmentBinding
-import com.sophia.project_minji.dialog.DialogTodo
-import com.sophia.project_minji.dialog.MyCustomDialogInterface
 import com.sophia.project_minji.entity.TodoEntity
-import com.sophia.project_minji.viewmodel.FbViewModel
-import com.sophia.project_minji.viewmodel.FbViewModelFactory
-import com.sophia.project_minji.viewmodel.TdViewModel
-import com.sophia.project_minji.viewmodel.TdViewModelFactory
+import com.sophia.project_minji.viewmodel.TodoViewModel
+import com.sophia.project_minji.viewmodel.TodoViewModelFactory
 
 class CalendarFragment: Fragment(), MyCustomDialogInterface {
 
@@ -32,8 +27,8 @@ class CalendarFragment: Fragment(), MyCustomDialogInterface {
     private var month: Int = 0
     private var day: Int = 0
 
-    private val viewModel by viewModels<TdViewModel> {
-        TdViewModelFactory(requireActivity().application)
+    private val viewModel by viewModels<TodoViewModel> {
+        TodoViewModelFactory(requireActivity().application)
     }
 
     override fun onCreateView(
@@ -53,13 +48,14 @@ class CalendarFragment: Fragment(), MyCustomDialogInterface {
         setBtnAdd()
     }
 
-    fun calendarDateData() {
-        binding?.calendarView?.setOnDateChangeListener { view, year, month, dayOfMonth ->
+    @SuppressLint("SetTextI18n")
+    private fun calendarDateData() {
+        binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             this.year = year
             this.month = month
             this.day = dayOfMonth
 
-            binding?.todayDate?.text = "${this.year}/${this.month}/${this.day}"
+            binding.todayDate.text = "${this.year}/${this.month}/${this.day}"
 
             viewModel.readDateData(this.year,this.month,this.day).observe(
                 viewLifecycleOwner,{
@@ -69,7 +65,7 @@ class CalendarFragment: Fragment(), MyCustomDialogInterface {
         }
     }
 
-    fun initRecyclerview() {
+    private fun initRecyclerview() {
         adapter = TodoAdapter(viewModel)
         binding.todoRecycleview.let {
             it.adapter = adapter
@@ -78,7 +74,7 @@ class CalendarFragment: Fragment(), MyCustomDialogInterface {
         }
     }
 
-    fun setBtnAdd() {
+    private fun setBtnAdd() {
         binding.addButton.setOnClickListener {
             if (year == 0) {
                 Toast.makeText(activity, "날짜를 선택해주세요.",Toast.LENGTH_SHORT).show()
@@ -88,7 +84,7 @@ class CalendarFragment: Fragment(), MyCustomDialogInterface {
         }
     }
 
-    fun onFabClicked() {
+    private fun onFabClicked() {
         val myCustomDialog = DialogTodo(requireActivity(), this)
         myCustomDialog.show()
     }
