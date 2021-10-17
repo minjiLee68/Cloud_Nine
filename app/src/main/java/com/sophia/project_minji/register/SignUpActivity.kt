@@ -15,7 +15,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.google.firebase.firestore.FirebaseFirestore
-import com.sophia.project_minji.activity.MainActivity
+import com.sophia.project_minji.MainActivity
 import com.sophia.project_minji.databinding.ActivitySignUpBinding
 import com.sophia.project_minji.utillties.Constants
 import com.sophia.project_minji.utillties.PreferenceManager

@@ -13,7 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.sophia.project_minji.activity.MainActivity
+import com.sophia.project_minji.MainActivity
 import com.sophia.project_minji.databinding.ActivityAddStudentBinding
 import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
 import com.sophia.project_minji.viewmodel.FirebaseViewModel

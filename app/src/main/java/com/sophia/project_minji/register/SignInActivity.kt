@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.sophia.project_minji.activity.MainActivity
+import com.sophia.project_minji.MainActivity
 import com.sophia.project_minji.databinding.ActivitySignInBinding
 import com.sophia.project_minji.utillties.Constants
 import com.sophia.project_minji.utillties.PreferenceManager
