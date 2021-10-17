@@ -1,4 +1,4 @@
-package com.sophia.project_minji.data
+package com.sophia.project_minji.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -10,7 +10,7 @@ interface TodoDao {
     @Query("SELECT * FROM todo WHERE year = :year AND month = :month AND day = :day ORDER BY id DESC")
     fun readDateData(year: Int, month: Int, day: Int): LiveData<List<TodoEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert
     fun insert(todo: TodoEntity)
 
     @Delete

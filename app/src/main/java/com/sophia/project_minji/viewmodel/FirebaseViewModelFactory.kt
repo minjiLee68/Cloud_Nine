@@ -1,19 +1,19 @@
 package com.sophia.project_minji.viewmodel
 
-import android.app.Application
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.sophia.project_minji.repository.TdRepository
+import com.sophia.project_minji.repository.FbRepository
 import java.lang.IllegalArgumentException
 
-class TdViewModelFactory(application: Application): ViewModelProvider.Factory {
+class FirebaseViewModelFactory(context: Context): ViewModelProvider.Factory {
 
-    private val tdRepository = TdRepository(application)
+    private val fRepository = FbRepository(context)
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(TdViewModel::class.java)) {
-            return TdViewModel(tdRepository) as T
+        if (modelClass.isAssignableFrom(FirebaseViewModel::class.java)) {
+            return FirebaseViewModel(fRepository) as T
         }
         throw IllegalArgumentException("UnKnown class name.")
     }

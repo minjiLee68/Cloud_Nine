@@ -9,16 +9,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.sophia.project_minji.R
 import com.sophia.project_minji.databinding.RvItemGrideBinding
 import com.sophia.project_minji.entity.StudentEntity
-import com.sophia.project_minji.fragment.StudentListFragment
-import com.sophia.project_minji.viewmodel.FbViewModel
+import com.sophia.project_minji.viewmodel.FirebaseViewModel
 
-class StudentGridAdapter(var context: Context, var studentList: ArrayList<StudentEntity>, val viewModel: FbViewModel)
+class StudentGridAdapter(var context: Context, var studentList: ArrayList<StudentEntity>, val viewModel: FirebaseViewModel)
     : ListAdapter<StudentEntity, StudentGridAdapter.StGrideViewHolder>(
 
         object : DiffUtil.ItemCallback<StudentEntity>() {
@@ -44,7 +40,7 @@ class StudentGridAdapter(var context: Context, var studentList: ArrayList<Studen
 //        var requestOption: RequestOptions = RequestOptions()
 //        val requestOptions = requestOption.transform(CenterCrop(),RoundedCorners(10))
 
-        val menus = binding.menuGrid
+        private val menus = binding.menuGrid
 
         fun bind(student: StudentEntity) {
             Glide.with(context).load(student.image).into(imageIv)
@@ -60,7 +56,7 @@ class StudentGridAdapter(var context: Context, var studentList: ArrayList<Studen
             }
         }
 
-        fun popupMenus(v: View) {
+        private fun popupMenus(v: View) {
             val popupMenus = PopupMenu(context.applicationContext,v)
             popupMenus.inflate(R.menu.popup_menu)
             popupMenus.setOnMenuItemClickListener {
@@ -93,7 +89,7 @@ class StudentGridAdapter(var context: Context, var studentList: ArrayList<Studen
         )
 
     override fun onBindViewHolder(holder: StGrideViewHolder, position: Int) {
-        val stinfor = studentList[position]
-        holder.bind(stinfor)
+        val stInfor = studentList[position]
+        holder.bind(stInfor)
     }
 }

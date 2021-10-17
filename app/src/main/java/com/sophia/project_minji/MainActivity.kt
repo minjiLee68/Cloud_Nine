@@ -4,13 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.sophia.project_minji.databinding.ActivityMainBinding
-import com.sophia.project_minji.fragment.CalendarFragment
+import com.sophia.project_minji.dialog.CalendarFragment
+import com.sophia.project_minji.chats.ChatsFragment
 import com.sophia.project_minji.fragment.MyPageFragment
-import com.sophia.project_minji.fragment.StudentListFragment
+import com.sophia.project_minji.studentinfor.StudentListFragment
 
 private const val TAG_STLIST_FRAGGMENT = "stListFragment"
 private const val TAG_CALENDAR_FRAGMENT = "calendarFragment"
 private const val TAG_MYPAGE_FRAGMENT = "mypageFragment"
+private const val TAG_CHATS_FRAGMENT = "chatsFragment"
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private val stListFragment = StudentListFragment()
     private val calendarFragment = CalendarFragment()
     private val mypageFragment = MyPageFragment()
+    private val chatsFragment = ChatsFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +43,9 @@ class MainActivity : AppCompatActivity() {
                    }
                    R.id.mypage -> {
                        replaceFragment(TAG_MYPAGE_FRAGMENT,mypageFragment)
+                   }
+                   R.id.message -> {
+                       replaceFragment(TAG_CHATS_FRAGMENT,chatsFragment)
                    }
                }
                true
@@ -66,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         val list = fragmentManager.findFragmentByTag(TAG_STLIST_FRAGGMENT)
         val calendar = fragmentManager.findFragmentByTag(TAG_CALENDAR_FRAGMENT)
         val mypage = fragmentManager.findFragmentByTag(TAG_MYPAGE_FRAGMENT)
+        val message = fragmentManager.findFragmentByTag(TAG_CHATS_FRAGMENT)
 
         if (list != null) {
             fragmentTransaction.hide(list)
@@ -75,6 +82,9 @@ class MainActivity : AppCompatActivity() {
         }
         if (mypage != null) {
             fragmentTransaction.hide(mypage)
+        }
+        if (message != null) {
+            fragmentTransaction.hide(message)
         }
 
         if (tag == TAG_STLIST_FRAGGMENT) {
@@ -92,6 +102,12 @@ class MainActivity : AppCompatActivity() {
         if (tag == TAG_MYPAGE_FRAGMENT) {
             if (mypage != null) {
                 fragmentTransaction.show(mypage)
+            }
+        }
+
+        if (tag == TAG_CHATS_FRAGMENT) {
+            if (message != null) {
+                fragmentTransaction.show(message)
             }
         }
         fragmentTransaction.commitAllowingStateLoss()

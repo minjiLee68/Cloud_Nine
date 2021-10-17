@@ -1,7 +1,9 @@
-package com.sophia.project_minji.fragment
+package com.sophia.project_minji.studentinfor
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,14 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.sophia.project_minji.AddStudentActivity
-import com.sophia.project_minji.StudentInforActivity
 import com.sophia.project_minji.adapter.StudentGridAdapter
 import com.sophia.project_minji.adapter.StudentLinearAdapter
 import com.sophia.project_minji.databinding.StListFragmentBinding
 import com.sophia.project_minji.entity.StudentEntity
-import com.sophia.project_minji.viewmodel.FbViewModelFactory
-import com.sophia.project_minji.viewmodel.FbViewModel
+import com.sophia.project_minji.utillties.Constants
+import com.sophia.project_minji.utillties.PreferenceManager
+import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
+import com.sophia.project_minji.viewmodel.FirebaseViewModel
 
 class StudentListFragment : Fragment(), StudentLinearAdapter.OnItemClickListener,
     StudentGridAdapter.OnItemClickListener {
@@ -25,12 +27,14 @@ class StudentListFragment : Fragment(), StudentLinearAdapter.OnItemClickListener
     val binding: StListFragmentBinding
         get() = _binding!!
 
-    private lateinit var Ladapter: StudentLinearAdapter
-    private lateinit var Gadapter: StudentGridAdapter
+    private lateinit var linearAdapter: StudentLinearAdapter
+    private lateinit var gridAdapter: StudentGridAdapter
     private var studentList: ArrayList<StudentEntity> = ArrayList()
 
-    private val viewModel by viewModels<FbViewModel> {
-        FbViewModelFactory()
+    private lateinit var preferenceManager: PreferenceManager
+
+    private val viewModel by viewModels<FirebaseViewModel> {
+        FirebaseViewModelFactory(requireContext())
     }
 
     override fun onCreateView(
@@ -45,25 +49,27 @@ class StudentListFragment : Fragment(), StudentLinearAdapter.OnItemClickListener
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getFirestore()
+        preferenceManager = PreferenceManager(requireContext())
+
+        init()
         initRecyclerLinear()
-        setIvBtnLinear()
-        setIvBtnGrid()
+        imageButtonClick()
         setAddStudentBtn()
+        loadUserDetails()
 
     }
 
-    //linear버튼 클릭시 Grid버튼으로 바꿔지고 Linear형식으로 나옴
-    fun setIvBtnLinear() {
+    private fun loadUserDetails() {
+        val bytes = Base64.decode(preferenceManager.getString(Constants.KEY_IMAGE),Base64.DEFAULT)
+        val bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.size)
+        binding.profile.setImageBitmap(bitmap)
+    }
+    private fun imageButtonClick() {
         binding.listBtn.setOnClickListener {
             initRecyclerLinear()
             binding.listBtn.visibility = View.GONE
             binding.grideBtn.visibility = View.VISIBLE
         }
-    }
-
-    //Grid버튼 클릭시 Linear버튼으로 바꿔지고 Grid형식으로 바뀜
-    fun setIvBtnGrid() {
         binding.grideBtn.setOnClickListener {
             initRecyclerGrid()
             binding.listBtn.visibility = View.VISIBLE
@@ -72,52 +78,55 @@ class StudentListFragment : Fragment(), StudentLinearAdapter.OnItemClickListener
     }
 
     //add버튼을 누르면 학생 추가할 수 있는 화면으로 바뀜
-    fun setAddStudentBtn() {
+    private fun setAddStudentBtn() {
         binding.ivAdd.setOnClickListener {
-            var intent = Intent(activity, AddStudentActivity::class.java)
+            val intent = Intent(activity, AddStudentActivity::class.java)
             startActivity(intent)
         }
     }
 
     //Linear형식 recyclerview
-    fun initRecyclerLinear() {
-
-
-        Ladapter.onItemClickListener = this
-
+    private fun initRecyclerLinear() {
+        linearAdapter.onItemClickListener = this
         binding.stRecyclerview.let {
-            it.adapter = Ladapter
+            it.adapter = linearAdapter
             it.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
         }
     }
 
     //Grid형식 recyclerview
-    fun initRecyclerGrid() {
-        Gadapter.onItemClickListener = this
-
+    private fun initRecyclerGrid() {
+        gridAdapter.onItemClickListener = this
         binding.stRecyclerview.let {
-            it.adapter = Gadapter
+            it.adapter = gridAdapter
             it.layoutManager = GridLayoutManager(activity,2)
         }
     }
 
     //firestore에 저장된 학생 데이터를 가져옴
-    fun getFirestore() {
-        //어댑터 초기화
-        Ladapter = StudentLinearAdapter(requireContext(), studentList, viewModel)
-        Gadapter = StudentGridAdapter(requireContext(), studentList, viewModel)
-        //viewmodel
-        viewModel.setFirestore(studentList,Ladapter, Gadapter)
+    private fun init() {
+        linearAdapter = StudentLinearAdapter(requireContext(), studentList, viewModel)
+        gridAdapter = StudentGridAdapter(requireContext(), studentList, viewModel)
+
+        viewModel.setFirestore(studentList,linearAdapter, gridAdapter)
     }
 
+//    private fun loading(isLoading: Boolean) {
+//        if (isLoading) {
+//            binding.progressBar.visibility = View.VISIBLE
+//        } else {
+//            binding.progressBar.visibility = View.INVISIBLE
+//        }
+//    }
+
     override fun onItemClickLinear(student: StudentEntity) {
-        var intent = Intent(activity, StudentInforActivity::class.java)
+        val intent = Intent(activity, StudentInforActivity::class.java)
         intent.putExtra("id",student.id)
         startActivity(intent)
     }
 
     override fun onItemClickGrid(student: StudentEntity) {
-        var intent = Intent(activity, StudentInforActivity::class.java)
+        val intent = Intent(activity, StudentInforActivity::class.java)
         intent.putExtra("id",student.id)
         startActivity(intent)
     }
@@ -127,6 +136,5 @@ class StudentListFragment : Fragment(), StudentLinearAdapter.OnItemClickListener
         super.onDestroyView()
         _binding = null
     }
-
 
 }

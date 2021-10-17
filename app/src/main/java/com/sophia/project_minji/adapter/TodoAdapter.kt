@@ -9,9 +9,9 @@ import com.sophia.project_minji.databinding.TodoItemBinding
 import com.sophia.project_minji.dialog.UpdateDialog
 import com.sophia.project_minji.dialog.UpdateDialogInterface
 import com.sophia.project_minji.entity.TodoEntity
-import com.sophia.project_minji.viewmodel.TdViewModel
+import com.sophia.project_minji.viewmodel.TodoViewModel
 
-class TodoAdapter(val viewModel: TdViewModel): ListAdapter<TodoEntity, TodoViewHolder>(
+class TodoAdapter(val viewModel: TodoViewModel): ListAdapter<TodoEntity, TodoViewHolder>(
 
     object : DiffUtil.ItemCallback<TodoEntity>() {
         override fun areItemsTheSame(oldItem: TodoEntity, newItem: TodoEntity): Boolean =
@@ -42,7 +42,7 @@ class TodoAdapter(val viewModel: TdViewModel): ListAdapter<TodoEntity, TodoViewH
 
 class TodoViewHolder(
     val binding: TodoItemBinding,
-    val viewModel: TdViewModel
+    val viewModel: TodoViewModel
 ): RecyclerView.ViewHolder(binding.root), UpdateDialogInterface {
 
     private lateinit var todomemo: TodoEntity

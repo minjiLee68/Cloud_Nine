@@ -5,12 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sophia.project_minji.entity.TodoEntity
-import com.sophia.project_minji.repository.TdRepository
+import com.sophia.project_minji.repository.TodoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
-class TdViewModel(private val repository: TdRepository): ViewModel() {
+class TodoViewModel(private val repository: TodoRepository): ViewModel() {
 
     private var _currentData = MutableLiveData<List<TodoEntity>>()
     val currentData: LiveData<List<TodoEntity>>
@@ -26,7 +25,7 @@ class TdViewModel(private val repository: TdRepository): ViewModel() {
 //        }
 //    }
 
-    private fun hashCurrentTodo() = _currentData.value != null
+//    private fun hashCurrentTodo() = _currentData.value != null
 
     fun insert(todo: TodoEntity) {
         viewModelScope.launch(Dispatchers.IO) {

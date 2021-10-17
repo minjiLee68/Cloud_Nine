@@ -15,10 +15,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.sophia.project_minji.R
 import com.sophia.project_minji.databinding.RvItemLinearBinding
 import com.sophia.project_minji.entity.StudentEntity
-import com.sophia.project_minji.fragment.StudentListFragment
-import com.sophia.project_minji.viewmodel.FbViewModel
+import com.sophia.project_minji.viewmodel.FirebaseViewModel
 
-class StudentLinearAdapter(var context: Context, var studentList: ArrayList<StudentEntity>,val viewModel: FbViewModel) :
+class StudentLinearAdapter(var context: Context, var studentList: ArrayList<StudentEntity>,val viewModel: FirebaseViewModel) :
     ListAdapter<StudentEntity, StudentLinearAdapter.StLinearViewHolder>(
 
         object : DiffUtil.ItemCallback<StudentEntity>() {
@@ -42,9 +41,9 @@ class StudentLinearAdapter(var context: Context, var studentList: ArrayList<Stud
         var imageIv = binding.itemImageHz
         var carBtn = binding.stCardview2
         var requestOption: RequestOptions = RequestOptions()
-        val requestOptions = requestOption.transform(CenterCrop(), RoundedCorners(50))
+        private val requestOptions = requestOption.transform(CenterCrop(), RoundedCorners(50))
 
-        val menus = binding.menuList
+        private val menus = binding.menuList
 
         fun bind(student: StudentEntity) {
             Glide.with(context).load(student.image).apply(requestOptions).into(imageIv)
@@ -61,7 +60,7 @@ class StudentLinearAdapter(var context: Context, var studentList: ArrayList<Stud
             }
         }
 
-        fun popupMenu(v: View) {
+        private fun popupMenu(v: View) {
             val popupMenus = PopupMenu(context,v)
             popupMenus.inflate(R.menu.popup_menu)
             popupMenus.setOnMenuItemClickListener {
@@ -69,7 +68,7 @@ class StudentLinearAdapter(var context: Context, var studentList: ArrayList<Stud
                     R.id.update_tv -> { true }
                     R.id.delete -> {
                         viewModel.deleteStudent(adapterPosition)
-                        studentList.remove(studentList.get(adapterPosition))
+                        studentList.remove(studentList[adapterPosition])
                         notifyDataSetChanged()
                         true
                     }
@@ -95,7 +94,7 @@ class StudentLinearAdapter(var context: Context, var studentList: ArrayList<Stud
 
 
     override fun onBindViewHolder(holder: StLinearViewHolder, position: Int) {
-        var stinfor = studentList[position]
+        val stinfor = studentList[position]
         holder.bind(stinfor)
     }
 }
