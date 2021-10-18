@@ -1,9 +1,12 @@
 package com.sophia.project_minji.studentinfor
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sophia.project_minji.adapter.StudentGridAdapter
 import com.sophia.project_minji.adapter.StudentLinearAdapter
 import com.sophia.project_minji.databinding.StListFragmentBinding
+import com.sophia.project_minji.dataclass.User
 import com.sophia.project_minji.entity.StudentEntity
 import com.sophia.project_minji.utillties.Constants
 import com.sophia.project_minji.utillties.PreferenceManager
@@ -34,7 +38,7 @@ class StudentListFragment : Fragment(), StudentLinearAdapter.OnItemClickListener
     private lateinit var preferenceManager: PreferenceManager
 
     private val viewModel by viewModels<FirebaseViewModel> {
-        FirebaseViewModelFactory(requireContext())
+        FirebaseViewModelFactory()
     }
 
     override fun onCreateView(
@@ -108,16 +112,8 @@ class StudentListFragment : Fragment(), StudentLinearAdapter.OnItemClickListener
         linearAdapter = StudentLinearAdapter(requireContext(), studentList, viewModel)
         gridAdapter = StudentGridAdapter(requireContext(), studentList, viewModel)
 
-        viewModel.setFirestore(studentList,linearAdapter, gridAdapter)
+        viewModel.setStudentInFor(studentList,linearAdapter, gridAdapter)
     }
-
-//    private fun loading(isLoading: Boolean) {
-//        if (isLoading) {
-//            binding.progressBar.visibility = View.VISIBLE
-//        } else {
-//            binding.progressBar.visibility = View.INVISIBLE
-//        }
-//    }
 
     override fun onItemClickLinear(student: StudentEntity) {
         val intent = Intent(activity, StudentInforActivity::class.java)

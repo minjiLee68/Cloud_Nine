@@ -111,7 +111,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
         fragmentTransaction.commitAllowingStateLoss()
-//        fragmentTransaction.add(binding.fragmenMain.id, fragment).commit()
-//        fragmentTransaction.addToBackStack(null)
     }
 }

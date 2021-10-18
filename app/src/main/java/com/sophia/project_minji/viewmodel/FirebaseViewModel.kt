@@ -16,25 +16,24 @@ class
 FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
 
     fun register(
-        students: HashMap<String, Any>,
         name: String,
-        brith: String,
-        phnumber: String,
-        image: Uri,
+        birth: String,
+        phNumber: String,
+        image: String,
         character: String
     ) {
         viewModelScope.launch(Dispatchers.Main) {
-            repository.register(students, name, brith, phnumber, image, character)
+            repository.register(name, birth, phNumber, image, character)
         }
     }
 
-    fun setFirestore(
+    fun setStudentInFor(
         studentList: ArrayList<StudentEntity>,
         linearAdapter: StudentLinearAdapter,
         gridAdapter: StudentGridAdapter
     ) {
         viewModelScope.launch(Dispatchers.Main) {
-            repository.setFirestore(studentList,linearAdapter, gridAdapter)
+            repository.setStudentInFor(studentList,linearAdapter, gridAdapter)
         }
 
     }

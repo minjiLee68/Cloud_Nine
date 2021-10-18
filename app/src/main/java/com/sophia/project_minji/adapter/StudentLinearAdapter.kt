@@ -1,6 +1,10 @@
 package com.sophia.project_minji.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +12,6 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.sophia.project_minji.R
 import com.sophia.project_minji.databinding.RvItemLinearBinding
 import com.sophia.project_minji.entity.StudentEntity
@@ -38,18 +38,15 @@ class StudentLinearAdapter(var context: Context, var studentList: ArrayList<Stud
     inner class StLinearViewHolder(private val binding: RvItemLinearBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        var imageIv = binding.itemImageHz
         var carBtn = binding.stCardview2
-        var requestOption: RequestOptions = RequestOptions()
-        private val requestOptions = requestOption.transform(CenterCrop(), RoundedCorners(50))
 
         private val menus = binding.menuList
 
         fun bind(student: StudentEntity) {
-            Glide.with(context).load(student.image).apply(requestOptions).into(imageIv)
             binding.itemNameHz.text = student.name
             binding.itemBirthHz.text = student.brith
             binding.itemPhnumberHz.text = student.phNumber
+            binding.itemImageHz.setImageBitmap(getUserImage(student.image!!))
             carBtn.setOnClickListener {
                 if (onItemClickListener != null) {
                     onItemClickListener?.onItemClickLinear(student)
@@ -60,6 +57,12 @@ class StudentLinearAdapter(var context: Context, var studentList: ArrayList<Stud
             }
         }
 
+        private fun getUserImage(encodedImage: String): Bitmap {
+            val bytes = Base64.decode(encodedImage, Base64.DEFAULT)
+            return BitmapFactory.decodeByteArray(bytes,0,bytes.size)
+        }
+
+        @SuppressLint("NotifyDataSetChanged", "DiscouragedPrivateApi")
         private fun popupMenu(v: View) {
             val popupMenus = PopupMenu(context,v)
             popupMenus.inflate(R.menu.popup_menu)

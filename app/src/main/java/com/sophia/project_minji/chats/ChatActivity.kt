@@ -72,7 +72,6 @@ class ChatActivity: AppCompatActivity() {
             conversion[Constants.KEY_RECEIVER_IMAGE] = receiverUser.image!!
             conversion[Constants.KEY_LAST_MESSAGE] = binding.inputMessage.text.toString()
             conversion[Constants.KEY_TIMESTAMP] = Date()
-//            addConversion(conversion)
         }
         binding.inputMessage.text = null
     }

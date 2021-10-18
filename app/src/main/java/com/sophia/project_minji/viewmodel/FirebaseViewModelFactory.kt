@@ -1,14 +1,13 @@
 package com.sophia.project_minji.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.sophia.project_minji.repository.FbRepository
 import java.lang.IllegalArgumentException
 
-class FirebaseViewModelFactory(context: Context): ViewModelProvider.Factory {
+class FirebaseViewModelFactory(): ViewModelProvider.Factory {
 
-    private val fRepository = FbRepository(context)
+    private val fRepository = FbRepository()
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

@@ -1,6 +1,10 @@
 package com.sophia.project_minji.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +12,6 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.sophia.project_minji.R
 import com.sophia.project_minji.databinding.RvItemGrideBinding
 import com.sophia.project_minji.entity.StudentEntity
@@ -35,17 +38,14 @@ class StudentGridAdapter(var context: Context, var studentList: ArrayList<Studen
     inner class StGrideViewHolder(private val binding: RvItemGrideBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        val imageIv = binding.itemImage
         val carBtn = binding.stCardview
-//        var requestOption: RequestOptions = RequestOptions()
-//        val requestOptions = requestOption.transform(CenterCrop(),RoundedCorners(10))
 
         private val menus = binding.menuGrid
 
         fun bind(student: StudentEntity) {
-            Glide.with(context).load(student.image).into(imageIv)
             binding.itemName.text = student.name
             binding.itemBirth.text = student.brith
+            binding.itemImage.setImageBitmap(getUserImage(student.image!!))
             carBtn.setOnClickListener {
                 if (onItemClickListener != null) {
                     onItemClickListener?.onItemClickGrid(student)
@@ -56,6 +56,13 @@ class StudentGridAdapter(var context: Context, var studentList: ArrayList<Studen
             }
         }
 
+        private fun getUserImage(encodedImage: String): Bitmap {
+            val bytes = Base64.decode(encodedImage, Base64.DEFAULT)
+            return BitmapFactory.decodeByteArray(bytes,0,bytes.size)
+        }
+
+
+        @SuppressLint("NotifyDataSetChanged", "DiscouragedPrivateApi")
         private fun popupMenus(v: View) {
             val popupMenus = PopupMenu(context.applicationContext,v)
             popupMenus.inflate(R.menu.popup_menu)

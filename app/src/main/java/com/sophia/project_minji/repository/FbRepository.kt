@@ -3,87 +3,78 @@ package com.sophia.project_minji.repository
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.firebase.storage.FirebaseStorage
+import com.sophia.project_minji.MainActivity
 import com.sophia.project_minji.adapter.StudentGridAdapter
 import com.sophia.project_minji.adapter.StudentLinearAdapter
+import com.sophia.project_minji.adapter.UsersAdapter
+import com.sophia.project_minji.dataclass.User
 import com.sophia.project_minji.entity.StudentEntity
 import com.sophia.project_minji.utillties.Constants
 import com.sophia.project_minji.utillties.PreferenceManager
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
-class FbRepository(context: Context) {
+class FbRepository() {
 
-    //    private val storage: FirebaseStorage = FirebaseStorage.getInstance()
     private val fireStore: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private var preferenceManager: PreferenceManager = PreferenceManager(context)
 
-    //firebase
     @SuppressLint("SimpleDateFormat")
     fun register(
-        students: HashMap<String, Any>,
         name: String,
         birth: String,
         phNumber: String,
-        image: Uri,
+        image: String,
         character: String
     ) {
-//        students[Constants.KEY_STUDENT_NAME] = name
-//        students[Constants.KEY_STUDENT_BIRTH] = birth
-//        students[Constants.KEY_STUDENT_PHNUMBER] = phNumber
-//        students[Constants.KEY_IMAGE] = image
-//        students[Constants.KEY_STUDENT_CHARACTER] = character
-//        fireStore.collection("Student")
-//            .add(students)
-//            .addOnSuccessListener { documentReference ->
-//                preferenceManager.putString(Constants.KEY_STUDENT_ID, documentReference.id)
-//                preferenceManager.putString(Constants.KEY_STUDENT_NAME, name)
-//                preferenceManager.putString(Constants.KEY_STUDENT_BIRTH, birth)
-//                preferenceManager.putString(Constants.KEY_STUDENT_PHNUMBER, phNumber)
-//                preferenceManager.putString(Constants.KEY_STUDENT_IMAGE, image)
-//                preferenceManager.putString(Constants.KEY_STUDENT_CHARACTER, character)
-//            }
-//        val fileName = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
-//        storage.reference.child("Student").child(fileName)
-//            .putFile(image)
-//            .addOnSuccessListener { taskSnapshot ->
+//        val student = StudentEntity(name, birth, phNumber, image, character)
+//        fireStore.collection("Student").document().set(student)
+        val database: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val user: HashMap<String, Any> = HashMap()
+        user[Constants.KEY_STUDENT_NAME] = name
+        user[Constants.KEY_STUDENT_BIRTH] = birth
+        user[Constants.KEY_STUDENT_PHNUMBER] = phNumber
+        user[Constants.KEY_STUDENT_IMAGE] = image
+        user[Constants.KEY_STUDENT_CHARACTER] = character
 
-//                taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { it ->
-//                    val imageUri = it.toString()
-        val images = image.toString()
-        val student = StudentEntity(name, birth, phNumber, images, character)
-        fireStore.collection("Student")
-            .document().set(student)
-//                }
-//            }
+        database.collection(Constants.KEY_COLLECTION_STUDENT).document().set(user)
+
     }
 
-    fun setFirestore(
+    fun setStudentInFor(
         studentList: ArrayList<StudentEntity>,
         linearAdapter: StudentLinearAdapter,
         gridAdapter: StudentGridAdapter
     ) {
-        fireStore.collection("Student").addSnapshotListener { value, _ ->
-            if (value != null) {
-                for (dc in value.documentChanges) {
-                    if (dc.type == DocumentChange.Type.ADDED) {
-                        val stInFor = dc.document.toObject(StudentEntity::class.java)
-                        stInFor.id = dc.document.id
-                        studentList.add(stInFor)
+
+        val database: FirebaseFirestore = FirebaseFirestore.getInstance()
+        database.collection(Constants.KEY_COLLECTION_STUDENT)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful && task.result != null) {
+                    for (queryDocumentSnapshot: QueryDocumentSnapshot in task.result!!) {
+                        val student = StudentEntity()
+
+                        student.name = queryDocumentSnapshot.getString(Constants.KEY_STUDENT_NAME)
+                        student.brith = queryDocumentSnapshot.getString(Constants.KEY_STUDENT_BIRTH)
+                        student.image = queryDocumentSnapshot.getString(Constants.KEY_STUDENT_IMAGE)
+                        student.phNumber = queryDocumentSnapshot.getString(Constants.KEY_STUDENT_PHNUMBER)
+                        student.character = queryDocumentSnapshot.getString(Constants.KEY_STUDENT_CHARACTER)
+                        student.id = queryDocumentSnapshot.id
+
+                        studentList.add(student)
                     }
+                    linearAdapter.submitList(studentList)
+                    gridAdapter.submitList(studentList)
                 }
             }
-            linearAdapter.submitList(studentList)
-            gridAdapter.submitList(studentList)
-        }
     }
 
     fun deleteStudent(position: Int) {

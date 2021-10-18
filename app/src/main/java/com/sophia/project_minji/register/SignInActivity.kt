@@ -1,9 +1,7 @@
 package com.sophia.project_minji.register
 
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -69,8 +67,6 @@ class SignInActivity : AppCompatActivity() {
                     val intent = Intent(applicationContext, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
-                    Log.d(ContentValues.TAG,"NAME ${preferences.getString(Constants.KEY_NAME)}")
-                    Log.d(ContentValues.TAG,"EMAIL ${preferences.getString(Constants.KEY_EMAIL)}")
                 } else {
                     loading((false))
                     showToast("Unable to sign in")

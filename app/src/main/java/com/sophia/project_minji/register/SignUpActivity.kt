@@ -11,7 +11,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,8 +18,6 @@ import com.sophia.project_minji.MainActivity
 import com.sophia.project_minji.databinding.ActivitySignUpBinding
 import com.sophia.project_minji.utillties.Constants
 import com.sophia.project_minji.utillties.PreferenceManager
-import com.sophia.project_minji.viewmodel.FirebaseViewModel
-import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 
@@ -29,10 +26,6 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignUpBinding
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var encodedImage: String
-
-    private val viewModel by viewModels<FirebaseViewModel> {
-        FirebaseViewModelFactory(applicationContext)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +108,7 @@ class SignUpActivity : AppCompatActivity() {
         user[Constants.KEY_EMAIL] = binding.myEmail.text.toString()
         user[Constants.KEY_PHNUMBER] = binding.myPhnumber.text.toString()
         user[Constants.KEY_IMAGE] = encodedImage
+
         database.collection(Constants.kEY_COLLECTION_UESRS) // missing or insufficient permissions
             .add(user)
             .addOnSuccessListener { documentReference ->

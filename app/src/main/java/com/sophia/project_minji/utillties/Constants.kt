@@ -3,16 +3,16 @@ package com.sophia.project_minji.utillties
 class Constants {
 
     companion object {
+        const val KEY_COLLECTION_STUDENT = "Student"
+        const val KEY_STUDENT_NAME = "name"
+        const val KEY_STUDENT_BIRTH = "birth"
+        const val KEY_STUDENT_PHNUMBER = "phNumber"
+        const val KEY_STUDENT_CHARACTER = "character"
+        const val KEY_STUDENT_IMAGE = "image"
         const val kEY_COLLECTION_UESRS = "uesrs"
         const val KEY_NAME = "name"
         const val KEY_EMAIL = "email"
         const val KEY_PHNUMBER = "phoneNumber"
-        const val KEY_STUDENT_ID = "studentId"
-        const val KEY_STUDENT_NAME = "studentName"
-        const val KEY_STUDENT_BIRTH = "studentBirth"
-        const val KEY_STUDENT_PHNUMBER = "studentPhNumber"
-        const val KEY_STUDENT_IMAGE = "studentImage"
-        const val KEY_STUDENT_CHARACTER = "studentCharacter"
         const val KEY_PREFERENCE_NAME = "chatAppPreference"
         const val KEY_IS_SIGNED_IN = "isSignedIn"
         const val KEY_UESR_ID = "uesrId"

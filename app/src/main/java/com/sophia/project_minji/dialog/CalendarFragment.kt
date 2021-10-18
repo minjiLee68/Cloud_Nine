@@ -76,7 +76,7 @@ class CalendarFragment: Fragment(), MyCustomDialogInterface {
 
     private fun setBtnAdd() {
         binding.addButton.setOnClickListener {
-            if (year == 0) {
+            if (day == 0) {
                 Toast.makeText(activity, "날짜를 선택해주세요.",Toast.LENGTH_SHORT).show()
             } else {
                 onFabClicked()
@@ -90,8 +90,7 @@ class CalendarFragment: Fragment(), MyCustomDialogInterface {
     }
 
     override fun onOkButtonClicked(content: String) {
-        val memo = TodoEntity(content, year, month, day)
-        viewModel.insert(memo)
+        viewModel.insert(content,year, month, day)
     }
 
     override fun onDestroyView() {

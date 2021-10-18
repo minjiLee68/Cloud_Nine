@@ -1,11 +1,9 @@
 package com.sophia.project_minji.chats
 
-import android.content.ContentValues
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -93,7 +91,6 @@ class ChatsFragment: Fragment(), UserListener {
                         user.id = queryDocumentSnapshot.id
 
                         users.add(user)
-                        Log.d(ContentValues.TAG,"TAG--${user.name}")
                     }
                     userAdapter = UsersAdapter(users,this)
                     binding.userRecyclerView.adapter = userAdapter
@@ -134,7 +131,6 @@ class ChatsFragment: Fragment(), UserListener {
         val intent = Intent(requireContext().applicationContext, ChatActivity::class.java)
         intent.putExtra(Constants.KEY_USER,user)
         startActivity(intent)
-        Log.d(ContentValues.TAG, "USER--${user}")
     }
 
     private fun signOut() {

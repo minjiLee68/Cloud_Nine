@@ -15,14 +15,16 @@
         android:layout_width="match_parent"
         android:layout_height="84dp">
 
-        <ImageView
+        <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/item_image_hz"
             android:layout_width="68dp"
             android:layout_height="68dp"
             android:layout_margin="10dp"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_corner_radius="15dp" />
 
         <TextView
             android:id="@+id/item_name_hz"

@@ -64,8 +64,7 @@ class TodoViewHolder(
 
     //다이얼로그의 결과값으로 업데이트 해줌
     override fun onOkButtonClicked(content: String) {
-        val updateTodoMemo = TodoEntity(content, todomemo.year, todomemo.month, todomemo.day, todomemo.id)
-        viewModel.update(updateTodoMemo)
+        viewModel.update(content, todomemo.year, todomemo.month, todomemo.day)
     }
 
 }

@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/activity_add_student.xml" value="0.381025641025641" />
+        <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/activity_sign_up.xml" value="0.381025641025641" />
+        <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/calendar_fragment.xml" value="0.381025641025641" />
+        <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/chats_fragment.xml" value="0.381025641025641" />
+        <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/item_container_received_message.xml" value="0.18819655521783182" />
+        <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/rv_item_gride.xml" value="0.381025641025641" />
+        <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/rv_item_linear.xml" value="0.33" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
