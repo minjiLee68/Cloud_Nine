@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.sophia.project_minji.repository.FbRepository
 import java.lang.IllegalArgumentException
 
-class FirebaseViewModelFactory(): ViewModelProvider.Factory {
+class FirebaseViewModelFactory: ViewModelProvider.Factory {
 
     private val fRepository = FbRepository()
 

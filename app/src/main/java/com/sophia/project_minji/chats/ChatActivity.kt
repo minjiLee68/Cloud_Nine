@@ -1,5 +1,6 @@
 package com.sophia.project_minji.chats
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -87,6 +88,7 @@ class ChatActivity: AppCompatActivity() {
             .addSnapshotListener(eventListener)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private val eventListener: EventListener<QuerySnapshot> = EventListener { value, error ->
         if (error != null) {
             return@EventListener
@@ -134,14 +136,6 @@ class ChatActivity: AppCompatActivity() {
         val bytes = Base64.decode(encodedImage, Base64.DEFAULT)
         return BitmapFactory.decodeByteArray(bytes,0,bytes.size)
     }
-
-//    private fun addConversion(conversion: HashMap<String,Any>) {
-//        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
-//            .add(conversion)
-//            .addOnSuccessListener { documentReference ->
-//                conversionId = documentReference.id
-//            }
-//    }
 
     private fun updateConversion(message: String) {
         val documentReference: DocumentReference = database.collection(Constants.KEY_COLLECTION_CONVERSATIONS).document(conversionId!!)

@@ -12,14 +12,13 @@ import com.sophia.project_minji.repository.FbRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class
-FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
+class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
 
     fun register(
         name: String,
         birth: String,
         phNumber: String,
-        image: String,
+        image: Uri,
         character: String
     ) {
         viewModelScope.launch(Dispatchers.Main) {
@@ -33,7 +32,7 @@ FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
         gridAdapter: StudentGridAdapter
     ) {
         viewModelScope.launch(Dispatchers.Main) {
-            repository.setStudentInFor(studentList,linearAdapter, gridAdapter)
+            repository.setStudentInFor(studentList, linearAdapter, gridAdapter)
         }
 
     }

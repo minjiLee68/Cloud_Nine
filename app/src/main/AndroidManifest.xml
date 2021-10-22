@@ -30,8 +30,7 @@
         <activity android:name=".studentinfor.StudentInforActivity"/>
 
         <service
-            android:name=".firebase.MessagingService"
-            android:exported="false">
+            android:name=".firebase.MessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

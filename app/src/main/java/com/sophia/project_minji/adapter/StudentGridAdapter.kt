@@ -12,6 +12,7 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.sophia.project_minji.R
 import com.sophia.project_minji.databinding.RvItemGrideBinding
 import com.sophia.project_minji.entity.StudentEntity
@@ -38,15 +39,14 @@ class StudentGridAdapter(var context: Context, var studentList: ArrayList<Studen
     inner class StGrideViewHolder(private val binding: RvItemGrideBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        val carBtn = binding.stCardview
-
         private val menus = binding.menuGrid
 
         fun bind(student: StudentEntity) {
+            Glide.with(context).load(student.image).into(binding.itemImage)
+
             binding.itemName.text = student.name
             binding.itemBirth.text = student.brith
-            binding.itemImage.setImageBitmap(getUserImage(student.image!!))
-            carBtn.setOnClickListener {
+            binding.root.setOnClickListener {
                 if (onItemClickListener != null) {
                     onItemClickListener?.onItemClickGrid(student)
                 }

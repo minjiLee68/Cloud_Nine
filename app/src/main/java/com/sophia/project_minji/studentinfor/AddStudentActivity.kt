@@ -1,15 +1,12 @@
 package com.sophia.project_minji.studentinfor
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.telephony.PhoneNumberFormattingTextWatcher
-import android.util.Base64
 import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
@@ -21,14 +18,13 @@ import com.sophia.project_minji.MainActivity
 import com.sophia.project_minji.databinding.ActivityAddStudentBinding
 import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
-import java.io.ByteArrayOutputStream
-import java.io.FileNotFoundException
+import java.lang.Exception
 
 class AddStudentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddStudentBinding
 
-    private lateinit var encodedImage: String
+    private lateinit var selectImage: Uri
 
     private val viewModel by viewModels<FirebaseViewModel> {
         FirebaseViewModelFactory()
@@ -60,16 +56,14 @@ class AddStudentActivity : AppCompatActivity() {
 
     private fun buttonUpload() {
         binding.saveBtn.setOnClickListener {
-            if (encodedImage != null) {
-                binding.let {
-                    viewModel.register(
-                        it.stname.text.toString(),
-                        it.stbrith.text.toString(),
-                        it.stphnumber.text.toString(),
-                        encodedImage,
-                        it.stcharacter.text.toString()
-                    )
-                }
+            binding.let {
+                viewModel.register(
+                    it.stname.text.toString(),
+                    it.stbrith.text.toString(),
+                    it.stphnumber.text.toString(),
+                    selectImage,
+                    it.stcharacter.text.toString()
+                )
             }
             binding.stname.text?.clear()
             binding.stbrith.text?.clear()
@@ -81,30 +75,23 @@ class AddStudentActivity : AppCompatActivity() {
         }
     }
 
-    private fun encodeImages(bitmap: Bitmap): String {
-        val previewWidth = 150
-        val previewHeight = bitmap.height * previewWidth / bitmap.width
-        val previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWidth, previewHeight,false)
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        previewBitmap.compress(Bitmap.CompressFormat.JPEG,50,byteArrayOutputStream)
-        val bytes = byteArrayOutputStream.toByteArray()
-        return Base64.encodeToString(bytes, Base64.DEFAULT)
-    }
-
-    private  val fileterActivityLauncher: ActivityResultLauncher<Intent> =
+    private val fileterActivityLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == RESULT_OK) {
-                if (it.data != null) {
-                    val imageUri = it.data!!.data
-                    try {
-                        val inputStream = contentResolver.openInputStream(imageUri!!)
-                        val bitmap = BitmapFactory.decodeStream(inputStream)
-                        binding.myImag.setImageBitmap(bitmap)
-                        binding.textAddImage.visibility = View.GONE
-                        encodedImage = encodeImages(bitmap)
-                    }catch (e: FileNotFoundException) {
-                        e.printStackTrace()
+            if (it.resultCode == RESULT_OK && it.data?.data != null) {
+                selectImage = it.data?.data!!
+                binding.myImag.setImageURI(selectImage)
+                try {
+                    selectImage.let {
+                        if (Build.VERSION.SDK_INT >= 28) {
+                            val source =
+                                ImageDecoder.createSource(this.contentResolver, selectImage)
+                            val bitmap = ImageDecoder.decodeBitmap(source)
+                            binding.myImag.setImageBitmap(bitmap)
+                            binding.textAddImage.visibility = View.GONE
+                        }
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         }

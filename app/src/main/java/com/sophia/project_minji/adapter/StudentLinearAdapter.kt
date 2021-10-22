@@ -12,6 +12,7 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.sophia.project_minji.R
 import com.sophia.project_minji.databinding.RvItemLinearBinding
 import com.sophia.project_minji.entity.StudentEntity
@@ -38,16 +39,16 @@ class StudentLinearAdapter(var context: Context, var studentList: ArrayList<Stud
     inner class StLinearViewHolder(private val binding: RvItemLinearBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        var carBtn = binding.stCardview2
-
         private val menus = binding.menuList
 
         fun bind(student: StudentEntity) {
+
+            Glide.with(context).load(student.image).into(binding.itemImageHz)
+
             binding.itemNameHz.text = student.name
             binding.itemBirthHz.text = student.brith
             binding.itemPhnumberHz.text = student.phNumber
-            binding.itemImageHz.setImageBitmap(getUserImage(student.image!!))
-            carBtn.setOnClickListener {
+            binding.root.setOnClickListener {
                 if (onItemClickListener != null) {
                     onItemClickListener?.onItemClickLinear(student)
                 }
