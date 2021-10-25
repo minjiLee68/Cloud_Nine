@@ -1,4 +1,4 @@
-package com.sophia.project_minji.fragment
+package com.sophia.project_minji.mypage
 
 import android.graphics.BitmapFactory
 import android.os.Bundle

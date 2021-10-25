@@ -23,7 +23,6 @@ import java.lang.Exception
 class AddStudentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddStudentBinding
-
     private lateinit var selectImage: Uri
 
     private val viewModel by viewModels<FirebaseViewModel> {

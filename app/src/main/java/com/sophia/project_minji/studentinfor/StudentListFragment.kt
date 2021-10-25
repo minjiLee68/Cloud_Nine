@@ -1,12 +1,9 @@
 package com.sophia.project_minji.studentinfor
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,15 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sophia.project_minji.adapter.StudentGridAdapter
 import com.sophia.project_minji.adapter.StudentLinearAdapter
 import com.sophia.project_minji.databinding.StListFragmentBinding
-import com.sophia.project_minji.dataclass.User
 import com.sophia.project_minji.entity.StudentEntity
+import com.sophia.project_minji.listeners.OnItemClickListener
 import com.sophia.project_minji.utillties.Constants
 import com.sophia.project_minji.utillties.PreferenceManager
 import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
 
-class StudentListFragment : Fragment(), StudentLinearAdapter.OnItemClickListener,
-    StudentGridAdapter.OnItemClickListener {
+class StudentListFragment : Fragment(), OnItemClickListener{
 
     private var _binding: StListFragmentBinding? = null
     val binding: StListFragmentBinding
@@ -56,6 +52,7 @@ class StudentListFragment : Fragment(), StudentLinearAdapter.OnItemClickListener
         preferenceManager = PreferenceManager(requireContext())
 
         init()
+        setStudentInFor()
         initRecyclerLinear()
         imageButtonClick()
         setAddStudentBtn()
@@ -91,7 +88,6 @@ class StudentListFragment : Fragment(), StudentLinearAdapter.OnItemClickListener
 
     //Linear형식 recyclerview
     private fun initRecyclerLinear() {
-        linearAdapter.onItemClickListener = this
         binding.stRecyclerview.let {
             it.adapter = linearAdapter
             it.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
@@ -100,34 +96,28 @@ class StudentListFragment : Fragment(), StudentLinearAdapter.OnItemClickListener
 
     //Grid형식 recyclerview
     private fun initRecyclerGrid() {
-        gridAdapter.onItemClickListener = this
         binding.stRecyclerview.let {
             it.adapter = gridAdapter
             it.layoutManager = GridLayoutManager(activity,2)
         }
     }
 
-    //firestore에 저장된 학생 데이터를 가져옴
     private fun init() {
-        linearAdapter = StudentLinearAdapter(requireContext(), studentList, viewModel)
-        gridAdapter = StudentGridAdapter(requireContext(), studentList, viewModel)
+        linearAdapter = StudentLinearAdapter(requireContext(), studentList, viewModel,this)
+        gridAdapter = StudentGridAdapter(requireContext(), studentList, viewModel,this)
+    }
 
+    //firestore에 저장된 학생 데이터를 가져옴
+    private fun setStudentInFor() {
+//        linearAdapter = StudentLinearAdapter(requireContext(), studentList, viewModel)
         viewModel.setStudentInFor(studentList,linearAdapter, gridAdapter)
     }
 
-    override fun onItemClickLinear(student: StudentEntity) {
+    override fun onItemClick(student: StudentEntity) {
         val intent = Intent(activity, StudentInforActivity::class.java)
         intent.putExtra("id",student.id)
         startActivity(intent)
     }
-
-    override fun onItemClickGrid(student: StudentEntity) {
-        val intent = Intent(activity, StudentInforActivity::class.java)
-        intent.putExtra("id",student.id)
-        startActivity(intent)
-    }
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

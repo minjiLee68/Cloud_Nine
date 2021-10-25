@@ -4,7 +4,7 @@ import java.util.*
 
 data class StudentEntity(
     var name: String? = "",
-    var brith: String? = "",
+    var birth: String? = "",
     var phNumber: String? = "",
     var image: String? = "",
     var character: String? = "",

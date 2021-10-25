@@ -2,6 +2,7 @@ package com.sophia.project_minji.repository
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.widget.Toast
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -10,6 +11,7 @@ import com.sophia.project_minji.adapter.StudentLinearAdapter
 import com.sophia.project_minji.entity.StudentEntity
 import com.sophia.project_minji.utillties.Constants
 import kotlin.collections.ArrayList
+import kotlin.coroutines.coroutineContext
 
 class FbRepository {
 
@@ -38,10 +40,10 @@ class FbRepository {
             if (value != null) {
                 for (dc in value.documentChanges) {
                     if (dc.type == DocumentChange.Type.ADDED) {
-                        val image = dc.document.toObject(StudentEntity::class.java)
-                        image.id = dc.document.id
+                        val stInFor = dc.document.toObject(StudentEntity::class.java)
+                        stInFor.id = dc.document.id
 
-                        studentList.add(image)
+                        studentList.add(stInFor)
                     }
                     linearAdapter.submitList(studentList)
                     gridAdapter.submitList(studentList)
@@ -51,15 +53,33 @@ class FbRepository {
     }
 
     fun deleteStudent(position: Int) {
-        fireStore.collection("Student").get().addOnCompleteListener {
-            if (it.isSuccessful) {
-                val documentSnapshot: DocumentSnapshot = it.result!!.documents[position]
-                val documentId = documentSnapshot.id
-                fireStore.collection("Student")
-                    .document(documentId)
-                    .delete()
+        fireStore.collection("Student")
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val documentSnapshot: DocumentSnapshot = task.result!!.documents[position]
+                    val documentId = documentSnapshot.id
+                    fireStore.collection("Student")
+                        .document(documentId)
+                        .delete()
+                }
             }
-        }
     }
 
+    fun updateStudent(
+        id: String,
+        name: String,
+        birth: String,
+        phNumber: String,
+        character: String
+    ) {
+        val map = mutableMapOf<String, Any>()
+        map["name"] = name
+        map["birth"] = birth
+        map["phNumber"] = phNumber
+        map["character"] = character
+        fireStore.collection("Student")
+            .document(id)
+            .update(map)
+    }
 }

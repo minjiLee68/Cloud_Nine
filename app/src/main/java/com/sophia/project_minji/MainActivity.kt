@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.sophia.project_minji.databinding.ActivityMainBinding
 import com.sophia.project_minji.dialog.CalendarFragment
 import com.sophia.project_minji.chats.ChatsFragment
-import com.sophia.project_minji.fragment.MyPageFragment
+import com.sophia.project_minji.mypage.MyPageFragment
 import com.sophia.project_minji.studentinfor.StudentListFragment
 
 private const val TAG_STLIST_FRAGGMENT = "stListFragment"

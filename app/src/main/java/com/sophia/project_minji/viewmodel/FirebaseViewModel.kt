@@ -43,4 +43,16 @@ class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
         }
     }
 
+    fun updateStudent(
+        id: String,
+        name: String,
+        birth: String,
+        phNumber: String,
+        character: String
+    ) {
+        viewModelScope.launch {
+            repository.updateStudent(id, name, birth, phNumber, character)
+        }
+    }
+
 }
