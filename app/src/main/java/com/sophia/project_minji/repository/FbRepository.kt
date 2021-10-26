@@ -3,11 +3,15 @@ package com.sophia.project_minji.repository
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.sophia.project_minji.adapter.StudentGridAdapter
 import com.sophia.project_minji.adapter.StudentLinearAdapter
+import com.sophia.project_minji.dataclass.User
 import com.sophia.project_minji.entity.StudentEntity
 import com.sophia.project_minji.utillties.Constants
 import kotlin.collections.ArrayList
@@ -16,6 +20,10 @@ import kotlin.coroutines.coroutineContext
 class FbRepository {
 
     private val fireStore: FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    private var _editLiveData = MutableLiveData<StudentEntity?>()
+    val editLiveData: LiveData<StudentEntity?>
+        get() = _editLiveData
 
     @SuppressLint("SimpleDateFormat")
     fun register(
@@ -42,6 +50,10 @@ class FbRepository {
                     if (dc.type == DocumentChange.Type.ADDED) {
                         val stInFor = dc.document.toObject(StudentEntity::class.java)
                         stInFor.id = dc.document.id
+                        stInFor.name = dc.document.get("name").toString()
+                        stInFor.birth = dc.document.get("birth").toString()
+                        stInFor.phNumber = dc.document.get("phNumber").toString()
+                        stInFor.character = dc.document.get("character").toString()
 
                         studentList.add(stInFor)
                     }

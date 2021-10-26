@@ -1,5 +1,6 @@
 package com.sophia.project_minji.studentinfor
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -109,7 +110,6 @@ class StudentListFragment : Fragment(), OnItemClickListener{
 
     //firestore에 저장된 학생 데이터를 가져옴
     private fun setStudentInFor() {
-//        linearAdapter = StudentLinearAdapter(requireContext(), studentList, viewModel)
         viewModel.setStudentInFor(studentList,linearAdapter, gridAdapter)
     }
 
@@ -118,6 +118,7 @@ class StudentListFragment : Fragment(), OnItemClickListener{
         intent.putExtra("id",student.id)
         startActivity(intent)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
