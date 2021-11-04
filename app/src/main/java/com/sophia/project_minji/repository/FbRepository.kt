@@ -2,20 +2,14 @@ package com.sophia.project_minji.repository
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.firestore.*
 import com.sophia.project_minji.adapter.StudentGridAdapter
 import com.sophia.project_minji.adapter.StudentLinearAdapter
-import com.sophia.project_minji.dataclass.User
 import com.sophia.project_minji.entity.StudentEntity
 import com.sophia.project_minji.utillties.Constants
 import kotlin.collections.ArrayList
-import kotlin.coroutines.coroutineContext
 
 class FbRepository {
 
@@ -31,37 +25,64 @@ class FbRepository {
         birth: String,
         phNumber: String,
         image: Uri,
-        character: String
+        character: String,
+        uid: String
     ) {
 
         val imageUri = image.toString()
-        val studentInFor = StudentEntity(name, birth, phNumber, imageUri, character)
+        val studentInFor = StudentEntity(name, birth, phNumber, imageUri, character, uid)
         fireStore.collection(Constants.KEY_COLLECTION_STUDENT).document().set(studentInFor)
     }
 
     fun setStudentInFor(
         studentList: ArrayList<StudentEntity>,
         linearAdapter: StudentLinearAdapter,
-        gridAdapter: StudentGridAdapter
+        gridAdapter: StudentGridAdapter,
+        id: String
     ) {
-        fireStore.collection(Constants.KEY_COLLECTION_STUDENT).addSnapshotListener { value, _ ->
-            if (value != null) {
-                for (dc in value.documentChanges) {
-                    if (dc.type == DocumentChange.Type.ADDED) {
-                        val stInFor = dc.document.toObject(StudentEntity::class.java)
-                        stInFor.id = dc.document.id
-                        stInFor.name = dc.document.get("name").toString()
-                        stInFor.birth = dc.document.get("birth").toString()
-                        stInFor.phNumber = dc.document.get("phNumber").toString()
-                        stInFor.character = dc.document.get("character").toString()
+        val stInfor = StudentEntity()
+//        fireStore.collection(Constants.KEY_COLLECTION_STUDENT).addSnapshotListener { value, _ ->
+//            if (value != null) {
+//                for (dc in value.documentChanges) {
+//                    if (dc.type == DocumentChange.Type.ADDED) {
+//                        val stInFor = dc.document.toObject(StudentEntity::class.java)
+//                        stInFor.id = id
+//                        stInFor.name = dc.document.get("name").toString()
+//                        stInFor.birth = dc.document.get("birth").toString()
+//                        stInFor.phNumber = dc.document.get("phNumber").toString()
+//                        stInFor.character = dc.document.get("character").toString()
+//
+//                        studentList.add(stInFor)
+//                    }
+//                    linearAdapter.submitList(studentList)
+//                    gridAdapter.submitList(studentList)
+//                }
+//            }
+//        }
+        fireStore.collection(Constants.KEY_COLLECTION_STUDENT)
+            .whereEqualTo("id", id)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    return@addSnapshotListener
+                }
+                if (value != null) {
+                    for (documentChange: DocumentChange in value.documentChanges) {
+                        if (documentChange.type == DocumentChange.Type.ADDED) {
+                            val studentEntity = StudentEntity()
+                            studentEntity.id = documentChange.document.getString("id")
+                            studentEntity.name = documentChange.document.getString("name")
+                            studentEntity.birth = documentChange.document.getString("birth")
+                            studentEntity.phNumber = documentChange.document.getString("phNumber")
+                            studentEntity.character = documentChange.document.getString("character")
+                            studentEntity.image = documentChange.document.getString("image")
 
-                        studentList.add(stInFor)
+                            studentList.add(studentEntity)
+                        }
+                        linearAdapter.submitList(studentList)
+                        gridAdapter.submitList(studentList)
                     }
-                    linearAdapter.submitList(studentList)
-                    gridAdapter.submitList(studentList)
                 }
             }
-        }
     }
 
     fun deleteStudent(position: Int) {
@@ -70,9 +91,8 @@ class FbRepository {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val documentSnapshot: DocumentSnapshot = task.result!!.documents[position]
-                    val documentId = documentSnapshot.id
                     fireStore.collection("Student")
-                        .document(documentId)
+                        .document(documentSnapshot.id)
                         .delete()
                 }
             }

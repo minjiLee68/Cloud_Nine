@@ -8,6 +8,5 @@ data class StudentEntity(
     var phNumber: String? = "",
     var image: String? = "",
     var character: String? = "",
-    var date: Date = Date(),
-    var id: String? = ""
+    var id: String? = "",
 )

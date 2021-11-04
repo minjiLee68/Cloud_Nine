@@ -1,11 +1,14 @@
 package com.sophia.project_minji.studentinfor
 
+import android.content.ContentValues
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.sophia.project_minji.databinding.StudentInforActivityBinding
@@ -44,11 +47,11 @@ class StudentInforActivity : AppCompatActivity() {
 
     private fun setDocument() {
         val id = intent.getStringExtra("id")
+        Log.d(ContentValues.TAG,"STUDENT${id}")
 
         if (id != null) {
             firestore.collection(Constants.KEY_COLLECTION_STUDENT).document(id).get().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-
                     val student = task.result?.toObject(StudentEntity::class.java)
                     binding.stName.text = student?.name
                     binding.stBirth.text = student?.birth

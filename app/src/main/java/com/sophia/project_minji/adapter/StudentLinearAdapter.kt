@@ -34,7 +34,7 @@ class StudentLinearAdapter(
             ): Boolean =
                 oldItem.name == newItem.name && oldItem.birth == newItem.birth
                         && oldItem.phNumber == newItem.phNumber && oldItem.character == newItem.character
-                        && oldItem.image == newItem.image && oldItem.date == newItem.date
+                        && oldItem.image == newItem.image
 
         }
 

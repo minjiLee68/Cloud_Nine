@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.sophia.project_minji.MainActivity
 import com.sophia.project_minji.databinding.ActivityAddStudentBinding
+import com.sophia.project_minji.utillties.Constants
+import com.sophia.project_minji.utillties.PreferenceManager
 import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
 import java.lang.Exception
@@ -24,6 +26,7 @@ class AddStudentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddStudentBinding
     private lateinit var selectImage: Uri
+    private lateinit var preferences: PreferenceManager
 
     private val viewModel by viewModels<FirebaseViewModel> {
         FirebaseViewModelFactory()
@@ -33,6 +36,8 @@ class AddStudentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddStudentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        preferences = PreferenceManager(applicationContext)
 
         setListener()
         requestPermissions()
@@ -54,6 +59,7 @@ class AddStudentActivity : AppCompatActivity() {
     }
 
     private fun buttonUpload() {
+        val uid = preferences.getString(Constants.KEY_UESR_ID)
         binding.saveBtn.setOnClickListener {
             binding.let {
                 viewModel.register(
@@ -61,7 +67,8 @@ class AddStudentActivity : AppCompatActivity() {
                     it.stbrith.text.toString(),
                     it.stphnumber.text.toString(),
                     selectImage,
-                    it.stcharacter.text.toString()
+                    it.stcharacter.text.toString(),
+                    uid
                 )
             }
             binding.stname.text?.clear()

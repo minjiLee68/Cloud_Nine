@@ -1,10 +1,12 @@
 package com.sophia.project_minji.studentinfor
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -110,7 +112,8 @@ class StudentListFragment : Fragment(), OnItemClickListener{
 
     //firestore에 저장된 학생 데이터를 가져옴
     private fun setStudentInFor() {
-        viewModel.setStudentInFor(studentList,linearAdapter, gridAdapter)
+        val id = preferenceManager.getString(Constants.KEY_UESR_ID)
+        viewModel.setStudentInFor(studentList,linearAdapter, gridAdapter, id)
     }
 
     override fun onItemClick(student: StudentEntity) {

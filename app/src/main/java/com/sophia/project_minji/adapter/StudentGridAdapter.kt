@@ -2,6 +2,7 @@ package com.sophia.project_minji.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +33,7 @@ class StudentGridAdapter(
         override fun areContentsTheSame(oldItem: StudentEntity, newItem: StudentEntity): Boolean =
             oldItem.name == newItem.name && oldItem.birth == newItem.birth
                     && oldItem.phNumber == newItem.phNumber && oldItem.character == newItem.character
-                    && oldItem.image == newItem.image && oldItem.date == newItem.date
+                    && oldItem.image == newItem.image
 
     }
 
