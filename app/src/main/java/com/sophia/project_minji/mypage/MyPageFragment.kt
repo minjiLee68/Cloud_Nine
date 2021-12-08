@@ -32,16 +32,11 @@ class MyPageFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         preferenceManager = PreferenceManager(requireContext())
 
-        loadUserDetails()
     }
 
     private fun loadUserDetails() {
         preferenceManager = PreferenceManager(requireContext())
 
-        binding.tvMyName.text = preferenceManager.getString(Constants.KEY_NAME)
-        val bytes = Base64.decode(preferenceManager.getString(Constants.KEY_IMAGE),Base64.DEFAULT)
-        val bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.size)
-        binding.myProfile.setImageBitmap(bitmap)
     }
 
 

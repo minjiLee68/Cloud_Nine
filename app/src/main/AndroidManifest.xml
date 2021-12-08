@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sophia.project_minji">
-
     <!-- 갤러리 권한 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,11 +12,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_minji">
-        <activity android:name=".chats.ChatActivity"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".register.SignUpActivity"
+        <activity
+            android:name=".ProfileSetUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".chats.ChatActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".register.SignInActivity"
+        <activity
+            android:name=".register.SignUpActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".register.SignInActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,14 +31,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".studentinfor.AddStudentActivity"/>
-        <activity android:name=".studentinfor.StudentInforActivity"/>
-
-        <service
-            android:name=".firebase.MessagingService">
+        <activity android:name=".studentinfor.AddStudentActivity" />
+        <activity android:name=".studentinfor.StudentInforActivity" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <service android:name=".firebase.MessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
     </application>
+
 </manifest>

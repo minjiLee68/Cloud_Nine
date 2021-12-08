@@ -4,11 +4,6 @@ class Constants {
 
     companion object {
         const val KEY_COLLECTION_STUDENT = "Student"
-        const val KEY_STUDENT_NAME = "name"
-        const val KEY_STUDENT_BIRTH = "birth"
-        const val KEY_STUDENT_PHNUMBER = "phNumber"
-        const val KEY_STUDENT_CHARACTER = "character"
-        const val KEY_STUDENT_IMAGE = "image"
         const val kEY_COLLECTION_UESRS = "uesrs"
         const val KEY_NAME = "name"
         const val KEY_EMAIL = "email"

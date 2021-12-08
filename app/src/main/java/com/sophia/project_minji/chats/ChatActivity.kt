@@ -35,10 +35,10 @@ class ChatActivity: AppCompatActivity() {
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setListener()
-        loadReceiverDetails()
-        init()
-        listenMessages()
+//        setListener()
+//        loadReceiverDetails()
+//        init()
+//        listenMessages()
     }
 
     private fun init() {

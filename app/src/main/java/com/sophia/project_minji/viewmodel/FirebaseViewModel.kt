@@ -8,11 +8,18 @@ import androidx.lifecycle.viewModelScope
 import com.sophia.project_minji.adapter.StudentGridAdapter
 import com.sophia.project_minji.adapter.StudentLinearAdapter
 import com.sophia.project_minji.entity.StudentEntity
+import com.sophia.project_minji.listeners.CallAnotherActivityNavigator
 import com.sophia.project_minji.repository.FbRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
+
+    fun setUser(name: String, email: String, navigator: CallAnotherActivityNavigator) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.setUser(name,email,navigator)
+        }
+    }
 
     fun register(
         name: String,
@@ -20,27 +27,22 @@ class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
         phNumber: String,
         image: Uri,
         character: String,
-        id: String
+        navigator: CallAnotherActivityNavigator
     ) {
-        viewModelScope.launch(Dispatchers.Main) {
-            repository.register(name, birth, phNumber, image, character, id)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.register(name, birth, phNumber, image, character,navigator)
         }
     }
 
-    fun setStudentInFor(
-        studentList: ArrayList<StudentEntity>,
-        linearAdapter: StudentLinearAdapter,
-        gridAdapter: StudentGridAdapter,
-        id: String
-    ) {
-        viewModelScope.launch(Dispatchers.Main) {
-            repository.setStudentInFor(studentList, linearAdapter, gridAdapter, id)
+    fun setStudentInFor(studentList: MutableList<StudentEntity>): LiveData<List<StudentEntity>> {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.setStudentInFor(studentList)
         }
-
+        return repository.getStudentLive()
     }
 
     fun deleteStudent(position: Int) {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.deleteStudent(position)
         }
     }

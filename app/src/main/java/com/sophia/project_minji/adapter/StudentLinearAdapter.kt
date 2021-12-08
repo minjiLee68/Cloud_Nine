@@ -14,11 +14,11 @@ import com.sophia.project_minji.R
 import com.sophia.project_minji.databinding.RvItemLinearBinding
 import com.sophia.project_minji.entity.StudentEntity
 import com.sophia.project_minji.listeners.OnItemClickListener
+import com.sophia.project_minji.utillties.PreferenceManager
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
 
 class StudentLinearAdapter(
-    var context: Context,
-    var studentList: ArrayList<StudentEntity>,
+    var studentList: MutableList<StudentEntity>,
     val viewModel: FirebaseViewModel,
     val listener: OnItemClickListener
 ) :
@@ -28,13 +28,8 @@ class StudentLinearAdapter(
             override fun areItemsTheSame(oldItem: StudentEntity, newItem: StudentEntity): Boolean =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(
-                oldItem: StudentEntity,
-                newItem: StudentEntity
-            ): Boolean =
-                oldItem.name == newItem.name && oldItem.birth == newItem.birth
-                        && oldItem.phNumber == newItem.phNumber && oldItem.character == newItem.character
-                        && oldItem.image == newItem.image
+            override fun areContentsTheSame(oldItem: StudentEntity, newItem: StudentEntity): Boolean =
+                oldItem.name == newItem.name && oldItem.image == newItem.image
 
         }
 
@@ -46,12 +41,11 @@ class StudentLinearAdapter(
         private val menus = binding.menuList
 
         fun bind(student: StudentEntity) {
-
-            Glide.with(itemView).load(student.image).into(binding.itemImageHz)
-
+            Glide.with(itemView.context).load(student.image).into(binding.itemImageHz)
             binding.itemNameHz.text = student.name
             binding.itemBirthHz.text = student.birth
             binding.itemPhnumberHz.text = student.phNumber
+
             binding.root.setOnClickListener {
                 listener.onItemClick(student)
             }
@@ -62,7 +56,7 @@ class StudentLinearAdapter(
 
         @SuppressLint("NotifyDataSetChanged", "DiscouragedPrivateApi")
         private fun popupMenu(v: View) {
-            val popupMenus = PopupMenu(context, v)
+            val popupMenus = PopupMenu(itemView.context, v)
             popupMenus.inflate(R.menu.popup_menu)
             popupMenus.setOnMenuItemClickListener {
                 when (it.itemId) {

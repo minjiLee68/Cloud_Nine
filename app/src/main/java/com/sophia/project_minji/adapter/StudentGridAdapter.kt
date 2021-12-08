@@ -2,7 +2,6 @@ package com.sophia.project_minji.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +17,7 @@ import com.sophia.project_minji.listeners.OnItemClickListener
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
 
 class StudentGridAdapter(
-    var context: Context,
-    var studentList: ArrayList<StudentEntity>,
+    var studentList: MutableList<StudentEntity>,
     val viewModel: FirebaseViewModel,
     val listener: OnItemClickListener
 
@@ -45,7 +43,7 @@ class StudentGridAdapter(
         private val menus = binding.menuGrid
 
         fun bind(student: StudentEntity) {
-            Glide.with(itemView).load(student.image).into(binding.itemImage)
+            Glide.with(itemView.context).load(student.image).into(binding.itemImage)
 
             binding.itemName.text = student.name
             binding.itemBirth.text = student.birth
@@ -59,7 +57,7 @@ class StudentGridAdapter(
 
         @SuppressLint("NotifyDataSetChanged", "DiscouragedPrivateApi")
         private fun popupMenus(v: View) {
-            val popupMenus = PopupMenu(context.applicationContext, v)
+            val popupMenus = PopupMenu(itemView.context, v)
             popupMenus.inflate(R.menu.popup_menu)
             popupMenus.setOnMenuItemClickListener {
                 when (it.itemId) {

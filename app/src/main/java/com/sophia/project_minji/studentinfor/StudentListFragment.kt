@@ -12,8 +12,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.sophia.project_minji.ProfileSetUpActivity
+import com.sophia.project_minji.R
 import com.sophia.project_minji.adapter.StudentGridAdapter
 import com.sophia.project_minji.adapter.StudentLinearAdapter
 import com.sophia.project_minji.databinding.StListFragmentBinding
@@ -24,20 +30,24 @@ import com.sophia.project_minji.utillties.PreferenceManager
 import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
 
-class StudentListFragment : Fragment(), OnItemClickListener{
+class StudentListFragment : Fragment(), OnItemClickListener {
 
     private var _binding: StListFragmentBinding? = null
     val binding: StListFragmentBinding
         get() = _binding!!
 
+    private lateinit var firestore: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
+    private lateinit var uid: String
+
     private lateinit var linearAdapter: StudentLinearAdapter
     private lateinit var gridAdapter: StudentGridAdapter
-    private var studentList: ArrayList<StudentEntity> = ArrayList()
+    private var studentList: MutableList<StudentEntity> = mutableListOf()
 
     private lateinit var preferenceManager: PreferenceManager
 
     private val viewModel by viewModels<FirebaseViewModel> {
-        FirebaseViewModelFactory()
+        FirebaseViewModelFactory(requireContext().applicationContext)
     }
 
     override fun onCreateView(
@@ -52,22 +62,36 @@ class StudentListFragment : Fragment(), OnItemClickListener{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        preferenceManager = PreferenceManager(requireContext())
-
         init()
-        setStudentInFor()
         initRecyclerLinear()
         imageButtonClick()
         setAddStudentBtn()
         loadUserDetails()
+    }
 
+    private fun init() {
+        preferenceManager = PreferenceManager(requireContext())
+        firestore = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
+        uid = auth.currentUser?.uid.toString()
     }
 
     private fun loadUserDetails() {
-        val bytes = Base64.decode(preferenceManager.getString(Constants.KEY_IMAGE),Base64.DEFAULT)
-        val bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.size)
-        binding.profile.setImageBitmap(bitmap)
+        firestore.collection("Users").document(uid).get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    if (task.result!!.exists()) {
+                        val image = task.result!!.getString("image")
+                        Glide.with(requireContext()).load(image).into(binding.profile)
+                    }
+                }
+            }
+        binding.profile.setOnClickListener {
+            val intent = Intent(requireContext().applicationContext, ProfileSetUpActivity::class.java)
+            startActivity(intent)
+        }
     }
+
     private fun imageButtonClick() {
         binding.listBtn.setOnClickListener {
             initRecyclerLinear()
@@ -91,34 +115,33 @@ class StudentListFragment : Fragment(), OnItemClickListener{
 
     //Linear형식 recyclerview
     private fun initRecyclerLinear() {
+        linearAdapter = StudentLinearAdapter(studentList, viewModel, this)
         binding.stRecyclerview.let {
             it.adapter = linearAdapter
-            it.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
+            it.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+            it.setHasFixedSize(true)
         }
+        viewModel.setStudentInFor(studentList).observe(viewLifecycleOwner, {
+            linearAdapter.submitList(it)
+        })
     }
 
     //Grid형식 recyclerview
     private fun initRecyclerGrid() {
+        gridAdapter = StudentGridAdapter(studentList, viewModel, this)
         binding.stRecyclerview.let {
             it.adapter = gridAdapter
-            it.layoutManager = GridLayoutManager(activity,2)
+            it.layoutManager = GridLayoutManager(activity, 2)
+            it.setHasFixedSize(true)
         }
+        viewModel.setStudentInFor(studentList).observe(viewLifecycleOwner, {
+            linearAdapter.submitList(it)
+        })
     }
 
-    private fun init() {
-        linearAdapter = StudentLinearAdapter(requireContext(), studentList, viewModel,this)
-        gridAdapter = StudentGridAdapter(requireContext(), studentList, viewModel,this)
-    }
-
-    //firestore에 저장된 학생 데이터를 가져옴
-    private fun setStudentInFor() {
-        val id = preferenceManager.getString(Constants.KEY_UESR_ID)
-        viewModel.setStudentInFor(studentList,linearAdapter, gridAdapter, id)
-    }
-
-    override fun onItemClick(student: StudentEntity) {
+    override fun onItemClick(id: StudentEntity) {
         val intent = Intent(activity, StudentInforActivity::class.java)
-        intent.putExtra("id",student.id)
+        intent.putExtra("id", id.user)
         startActivity(intent)
     }
 

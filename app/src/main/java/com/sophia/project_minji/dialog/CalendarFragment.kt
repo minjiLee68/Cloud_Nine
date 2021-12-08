@@ -2,6 +2,7 @@ package com.sophia.project_minji.dialog
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,10 +53,11 @@ class CalendarFragment: Fragment(), MyCustomDialogInterface {
     private fun calendarDateData() {
         binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             this.year = year
-            this.month = month
+            this.month = month +1
             this.day = dayOfMonth
 
             binding.todayDate.text = "${this.year}/${this.month}/${this.day}"
+            Log.d("tag",this.month.toString())
 
             viewModel.readDateData(this.year,this.month,this.day).observe(
                 viewLifecycleOwner,{

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,6 +32,7 @@ class ChatsFragment: Fragment(), UserListener {
 
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var userAdapter: UsersAdapter
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,11 +47,22 @@ class ChatsFragment: Fragment(), UserListener {
         super.onViewCreated(view, savedInstanceState)
 
         preferenceManager = PreferenceManager(requireContext())
+        auth = FirebaseAuth.getInstance()
 
-        getUsers()
-        getToken()
-        loadUserDetails()
-        setListener()
+        setButtonLogout()
+
+//        getUsers()
+//        getToken()
+//        setListener()
+    }
+
+    private fun setButtonLogout() {
+        binding.imageSignOut.setOnClickListener {
+            val intent = Intent(requireContext().applicationContext, SignInActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+            auth.signOut()
+        }
     }
 
     private fun setListener() {
