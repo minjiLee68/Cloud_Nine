@@ -67,6 +67,7 @@ class StudentListFragment : Fragment(), OnItemClickListener {
         imageButtonClick()
         setAddStudentBtn()
         loadUserDetails()
+        setStudentInFor()
     }
 
     private fun init() {
@@ -74,6 +75,9 @@ class StudentListFragment : Fragment(), OnItemClickListener {
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         uid = auth.currentUser?.uid.toString()
+
+        linearAdapter = StudentLinearAdapter(studentList, viewModel, this)
+        gridAdapter = StudentGridAdapter(studentList, viewModel, this)
     }
 
     private fun loadUserDetails() {
@@ -87,7 +91,8 @@ class StudentListFragment : Fragment(), OnItemClickListener {
                 }
             }
         binding.profile.setOnClickListener {
-            val intent = Intent(requireContext().applicationContext, ProfileSetUpActivity::class.java)
+            val intent =
+                Intent(requireContext().applicationContext, ProfileSetUpActivity::class.java)
             startActivity(intent)
         }
     }
@@ -98,6 +103,7 @@ class StudentListFragment : Fragment(), OnItemClickListener {
             binding.listBtn.visibility = View.GONE
             binding.grideBtn.visibility = View.VISIBLE
         }
+
         binding.grideBtn.setOnClickListener {
             initRecyclerGrid()
             binding.listBtn.visibility = View.VISIBLE
@@ -115,33 +121,31 @@ class StudentListFragment : Fragment(), OnItemClickListener {
 
     //Linear형식 recyclerview
     private fun initRecyclerLinear() {
-        linearAdapter = StudentLinearAdapter(studentList, viewModel, this)
         binding.stRecyclerview.let {
             it.adapter = linearAdapter
-            it.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            it.setHasFixedSize(true)
+            it.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
         }
-        viewModel.setStudentInFor(studentList).observe(viewLifecycleOwner, {
-            linearAdapter.submitList(it)
-        })
     }
 
     //Grid형식 recyclerview
     private fun initRecyclerGrid() {
-        gridAdapter = StudentGridAdapter(studentList, viewModel, this)
         binding.stRecyclerview.let {
             it.adapter = gridAdapter
-            it.layoutManager = GridLayoutManager(activity, 2)
-            it.setHasFixedSize(true)
+            it.layoutManager = GridLayoutManager(activity,2)
         }
+    }
+
+    private fun setStudentInFor() {
+//        viewModel.setStudentInFor(studentList,linearAdapter, gridAdapter)
         viewModel.setStudentInFor(studentList).observe(viewLifecycleOwner, {
             linearAdapter.submitList(it)
+            gridAdapter.submitList(it)
         })
     }
 
     override fun onItemClick(id: StudentEntity) {
         val intent = Intent(activity, StudentInforActivity::class.java)
-        intent.putExtra("id", id.user)
+        intent.putExtra("id", id.id)
         startActivity(intent)
     }
 

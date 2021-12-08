@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sophia.project_minji.R
+import com.sophia.project_minji.databinding.RvItemGrideBinding
 import com.sophia.project_minji.databinding.RvItemLinearBinding
 import com.sophia.project_minji.entity.StudentEntity
+import com.sophia.project_minji.entity.Type
 import com.sophia.project_minji.listeners.OnItemClickListener
 import com.sophia.project_minji.utillties.PreferenceManager
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
@@ -28,7 +30,10 @@ class StudentLinearAdapter(
             override fun areItemsTheSame(oldItem: StudentEntity, newItem: StudentEntity): Boolean =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: StudentEntity, newItem: StudentEntity): Boolean =
+            override fun areContentsTheSame(
+                oldItem: StudentEntity,
+                newItem: StudentEntity
+            ): Boolean =
                 oldItem.name == newItem.name && oldItem.image == newItem.image
 
         }

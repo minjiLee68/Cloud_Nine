@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/titilliumweb"
             android:gravity="center"
-            android:text="Student Infor"
+            android:text="학생 정보"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -17,7 +17,7 @@ class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
 
     fun setUser(name: String, email: String, navigator: CallAnotherActivityNavigator) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.setUser(name,email,navigator)
+            repository.setUser(name, email, navigator)
         }
     }
 
@@ -29,22 +29,24 @@ class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
         character: String,
         navigator: CallAnotherActivityNavigator
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.register(name, birth, phNumber, image, character,navigator)
-        }
+        repository.register(name, birth, phNumber, image, character, navigator)
     }
 
+//    fun setStudentInFor(
+//        studentList: MutableList<StudentEntity>,
+//        linearAdapter: StudentLinearAdapter,
+//        gridAdapter: StudentGridAdapter
+//    ) {
+//        repository.setStudentInFor(studentList,linearAdapter, gridAdapter)
+//    }
+
     fun setStudentInFor(studentList: MutableList<StudentEntity>): LiveData<List<StudentEntity>> {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.setStudentInFor(studentList)
-        }
+        repository.setStudentInFor(studentList)
         return repository.getStudentLive()
     }
 
     fun deleteStudent(position: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteStudent(position)
-        }
+        repository.deleteStudent(position)
     }
 
     fun updateStudent(
@@ -54,9 +56,7 @@ class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
         phNumber: String,
         character: String
     ) {
-        viewModelScope.launch {
-            repository.updateStudent(id, name, birth, phNumber, character)
-        }
+        repository.updateStudent(id, name, birth, phNumber, character)
     }
 
 }

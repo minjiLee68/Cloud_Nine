@@ -28,9 +28,8 @@ class FbRepository(context: Context) {
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     private var Uid: String = auth.currentUser?.uid.toString()
     private var progressBar: ProgressBar = ProgressBar(context)
-    private val preferenceManager: PreferenceManager = PreferenceManager(context)
 
-    private var _studentLive = MutableLiveData<List<StudentEntity>>()
+    private val _studentLive = MutableLiveData<List<StudentEntity>>()
     fun getStudentLive(): LiveData<List<StudentEntity>> = _studentLive
 
     //사용자 프로필 만들기
@@ -63,7 +62,8 @@ class FbRepository(context: Context) {
             if (task.isSuccessful) {
                 progressBar.visibility = View.INVISIBLE
                 inforRef.downloadUrl.addOnSuccessListener { uri ->
-                    val student = StudentEntity(name, birth, phNumber, uri.toString(), character, Uid)
+                    val student =
+                        StudentEntity(name, birth, phNumber, uri.toString(), character, Uid)
                     firestore.collection("Students").document().set(student)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
@@ -77,6 +77,39 @@ class FbRepository(context: Context) {
     }
 
     //학생정보 가져오기
+//    fun setStudentInFor(
+//        studentList: MutableList<StudentEntity>,
+//        linearAdapter: StudentLinearAdapter,
+//        gridAdapter: StudentGridAdapter
+//    ) {
+//        firestore.collection("Students")
+//            .whereEqualTo("user", Uid)
+//            .addSnapshotListener { value, error ->
+//                if (error != null) {
+//                    return@addSnapshotListener
+//                }
+//                if (value != null) {
+//                    for (documentChange: DocumentChange in value.documentChanges) {
+//                        if (documentChange.type == DocumentChange.Type.ADDED) {
+//                            val userId = documentChange.document.id
+//                            val studentEntity = documentChange.document.toObject(StudentEntity::class.java).withId(userId)
+//                            studentEntity.name = documentChange.document.getString("name")!!
+//                            studentEntity.birth = documentChange.document.getString("birth")!!
+//                            studentEntity.phNumber = documentChange.document.getString("phNumber")!!
+//                            studentEntity.character = documentChange.document.getString("character")!!
+//                            studentEntity.image = documentChange.document.getString("image")!!
+//                            studentEntity.user = documentChange.document.getString("user")!!
+//
+//                            studentList.add(studentEntity)
+//
+//                            linearAdapter.submitList(studentList)
+//                            gridAdapter.submitList(studentList)
+//                        }
+//                    }
+//                }
+//            }
+//    }
+
     fun setStudentInFor(studentList: MutableList<StudentEntity>): LiveData<List<StudentEntity>> {
         firestore.collection("Students")
             .whereEqualTo("user", Uid)
@@ -88,8 +121,7 @@ class FbRepository(context: Context) {
                     for (documentChange: DocumentChange in value.documentChanges) {
                         if (documentChange.type == DocumentChange.Type.ADDED) {
                             val userId = documentChange.document.id
-                            val studentEntity =
-                                documentChange.document.toObject(StudentEntity::class.java).withId(userId)
+                            val studentEntity = documentChange.document.toObject(StudentEntity::class.java).withId(userId)
                             studentEntity.name = documentChange.document.getString("name")!!
                             studentEntity.birth = documentChange.document.getString("birth")!!
                             studentEntity.phNumber = documentChange.document.getString("phNumber")!!
@@ -98,6 +130,7 @@ class FbRepository(context: Context) {
                             studentEntity.user = documentChange.document.getString("user")!!
 
                             studentList.add(studentEntity)
+
                             _studentLive.value = studentList
                         }
                     }
@@ -110,13 +143,13 @@ class FbRepository(context: Context) {
     //학생정보 삭제
     fun deleteStudent(position: Int) {
         firestore.collection("Students").get().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val documentSnapshot: DocumentSnapshot = task.result!!.documents[position]
-                    firestore.collection("Student")
-                        .document(documentSnapshot.id)
-                        .delete()
-                }
+            if (task.isSuccessful) {
+                val documentSnapshot: DocumentSnapshot = task.result!!.documents[position]
+                firestore.collection("Student")
+                    .document(documentSnapshot.id)
+                    .delete()
             }
+        }
     }
 
     //학생 정보 업데이트
