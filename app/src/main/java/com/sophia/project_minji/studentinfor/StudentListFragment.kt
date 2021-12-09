@@ -136,7 +136,6 @@ class StudentListFragment : Fragment(), OnItemClickListener {
     }
 
     private fun setStudentInFor() {
-//        viewModel.setStudentInFor(studentList,linearAdapter, gridAdapter)
         viewModel.setStudentInFor(studentList).observe(viewLifecycleOwner, {
             linearAdapter.submitList(it)
             gridAdapter.submitList(it)

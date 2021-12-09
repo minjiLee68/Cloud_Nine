@@ -1,6 +1,7 @@
 package com.sophia.project_minji.listeners
 
-import com.sophia.project_minji.dataclass.User
+import com.sophia.project_minji.entity.User
+
 
 interface UserListener {
     fun onUserClicked(user: User)

@@ -14,6 +14,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.sophia.project_minji.adapter.StudentGridAdapter
 import com.sophia.project_minji.adapter.StudentLinearAdapter
+import com.sophia.project_minji.entity.Chat
 import com.sophia.project_minji.entity.StudentEntity
 import com.sophia.project_minji.entity.User
 import com.sophia.project_minji.listeners.CallAnotherActivityNavigator
@@ -29,8 +30,16 @@ class FbRepository(context: Context) {
     private var Uid: String = auth.currentUser?.uid.toString()
     private var progressBar: ProgressBar = ProgressBar(context)
 
+    private val preferenceManager: PreferenceManager = PreferenceManager(context)
+
     private val _studentLive = MutableLiveData<List<StudentEntity>>()
     fun getStudentLive(): LiveData<List<StudentEntity>> = _studentLive
+
+    private val _userLive = MutableLiveData<List<User>>()
+    fun getUserLive(): LiveData<List<User>> = _userLive
+
+    private val _chatLive = MutableLiveData<List<Chat>>()
+    fun getChatLive(): LiveData<List<Chat>> = _chatLive
 
     //사용자 프로필 만들기
     fun setUser(name: String, image: String, navigator: CallAnotherActivityNavigator) {
@@ -76,40 +85,6 @@ class FbRepository(context: Context) {
         }
     }
 
-    //학생정보 가져오기
-//    fun setStudentInFor(
-//        studentList: MutableList<StudentEntity>,
-//        linearAdapter: StudentLinearAdapter,
-//        gridAdapter: StudentGridAdapter
-//    ) {
-//        firestore.collection("Students")
-//            .whereEqualTo("user", Uid)
-//            .addSnapshotListener { value, error ->
-//                if (error != null) {
-//                    return@addSnapshotListener
-//                }
-//                if (value != null) {
-//                    for (documentChange: DocumentChange in value.documentChanges) {
-//                        if (documentChange.type == DocumentChange.Type.ADDED) {
-//                            val userId = documentChange.document.id
-//                            val studentEntity = documentChange.document.toObject(StudentEntity::class.java).withId(userId)
-//                            studentEntity.name = documentChange.document.getString("name")!!
-//                            studentEntity.birth = documentChange.document.getString("birth")!!
-//                            studentEntity.phNumber = documentChange.document.getString("phNumber")!!
-//                            studentEntity.character = documentChange.document.getString("character")!!
-//                            studentEntity.image = documentChange.document.getString("image")!!
-//                            studentEntity.user = documentChange.document.getString("user")!!
-//
-//                            studentList.add(studentEntity)
-//
-//                            linearAdapter.submitList(studentList)
-//                            gridAdapter.submitList(studentList)
-//                        }
-//                    }
-//                }
-//            }
-//    }
-
     fun setStudentInFor(studentList: MutableList<StudentEntity>): LiveData<List<StudentEntity>> {
         firestore.collection("Students")
             .whereEqualTo("user", Uid)
@@ -121,11 +96,14 @@ class FbRepository(context: Context) {
                     for (documentChange: DocumentChange in value.documentChanges) {
                         if (documentChange.type == DocumentChange.Type.ADDED) {
                             val userId = documentChange.document.id
-                            val studentEntity = documentChange.document.toObject(StudentEntity::class.java).withId(userId)
+                            val studentEntity =
+                                documentChange.document.toObject(StudentEntity::class.java)
+                                    .withId(userId)
                             studentEntity.name = documentChange.document.getString("name")!!
                             studentEntity.birth = documentChange.document.getString("birth")!!
                             studentEntity.phNumber = documentChange.document.getString("phNumber")!!
-                            studentEntity.character = documentChange.document.getString("character")!!
+                            studentEntity.character =
+                                documentChange.document.getString("character")!!
                             studentEntity.image = documentChange.document.getString("image")!!
                             studentEntity.user = documentChange.document.getString("user")!!
 
@@ -145,7 +123,7 @@ class FbRepository(context: Context) {
         firestore.collection("Students").get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val documentSnapshot: DocumentSnapshot = task.result!!.documents[position]
-                firestore.collection("Student")
+                firestore.collection("Students")
                     .document(documentSnapshot.id)
                     .delete()
             }
@@ -168,5 +146,89 @@ class FbRepository(context: Context) {
         firestore.collection("Students")
             .document(id)
             .update(map)
+    }
+
+    //어플 사용자 가져오기
+    fun getUsers(userList: MutableList<User>): LiveData<List<User>> {
+        val database: FirebaseFirestore = FirebaseFirestore.getInstance()
+        database.collection("Users").addSnapshotListener { value, _ ->
+            if (value != null) {
+                for (dc: DocumentChange in value.documentChanges) {
+                    if (dc.type == DocumentChange.Type.ADDED) {
+                        if (Uid == dc.document.id) {
+                            continue
+                        }
+                        val userId = dc.document.id
+                        val user = dc.document.toObject(User::class.java)
+                        user.name = dc.document.getString("name")!!
+                        user.image = dc.document.getString("image")!!
+                        user.userId = userId
+
+                        userList.add(user)
+                        _userLive.value = userList
+                    }
+                }
+            }
+        }
+        return _userLive
+    }
+
+    fun sendMessage(message: String, time: String, userId: String) {
+        firestore.collection("Users").document(Uid).get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    if (task.result!!.exists()) {
+                        val name = task.result!!.getString("name")!!
+                        val image = task.result!!.getString("image")!!
+                        val chats = Chat(message, time, Uid, userId, image)
+                        firestore.collection("Users/$userId/Chats").document().set(chats)
+                    }
+                }
+            }
+    }
+
+    fun getMessageId(
+        userId: String,
+        chatMessages: MutableList<Chat>,
+    ): LiveData<List<Chat>> {
+        firestore.collection("Users/$userId/Chats")
+            .whereEqualTo("sendId", Uid)
+            .whereEqualTo("receiverId", userId)
+            .addSnapshotListener { value, _ ->
+                for (dc: DocumentChange in value!!.documentChanges) {
+                    if (dc.type == DocumentChange.Type.ADDED) {
+                        val chats = dc.document.toObject(Chat::class.java)
+                        chats.message = dc.document.getString("message")!!
+                        chats.sendId = dc.document.getString("sendId")!!
+                        chats.receiverId = dc.document.getString("receiverId")!!
+                        chats.userProfile = dc.document.getString("userProfile")!!
+                        chats.time = dc.document.getString("time")!!
+
+                        chatMessages.add(chats)
+                        _chatLive.value = chatMessages
+                    }
+                }
+            }
+
+        firestore.collection("Users/$Uid/Chats")
+            .whereEqualTo("sendId", userId)
+            .whereEqualTo("receiverId", Uid)
+            .addSnapshotListener { value, _ ->
+                for (dc: DocumentChange in value!!.documentChanges) {
+                    if (dc.type == DocumentChange.Type.ADDED) {
+                        val chats = dc.document.toObject(Chat::class.java)
+                        chats.message = dc.document.getString("message")!!
+                        chats.sendId = dc.document.getString("sendId")!!
+                        chats.receiverId = dc.document.getString("receiverId")!!
+                        chats.userProfile = dc.document.getString("userProfile")!!
+                        chats.time = dc.document.getString("time")!!
+
+                        chatMessages.add(chats)
+                        _chatLive.value = chatMessages
+                    }
+                }
+            }
+
+        return _chatLive
     }
 }

@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sophia.project_minji.adapter.StudentGridAdapter
 import com.sophia.project_minji.adapter.StudentLinearAdapter
+import com.sophia.project_minji.entity.Chat
 import com.sophia.project_minji.entity.StudentEntity
+import com.sophia.project_minji.entity.User
 import com.sophia.project_minji.listeners.CallAnotherActivityNavigator
 import com.sophia.project_minji.repository.FbRepository
 import kotlinx.coroutines.Dispatchers
@@ -32,14 +34,6 @@ class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
         repository.register(name, birth, phNumber, image, character, navigator)
     }
 
-//    fun setStudentInFor(
-//        studentList: MutableList<StudentEntity>,
-//        linearAdapter: StudentLinearAdapter,
-//        gridAdapter: StudentGridAdapter
-//    ) {
-//        repository.setStudentInFor(studentList,linearAdapter, gridAdapter)
-//    }
-
     fun setStudentInFor(studentList: MutableList<StudentEntity>): LiveData<List<StudentEntity>> {
         repository.setStudentInFor(studentList)
         return repository.getStudentLive()
@@ -57,6 +51,20 @@ class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
         character: String
     ) {
         repository.updateStudent(id, name, birth, phNumber, character)
+    }
+
+    fun getUsers(userList: MutableList<User>): LiveData<List<User>> {
+        repository.getUsers(userList)
+        return repository.getUserLive()
+    }
+
+    fun sendMessage(message: String, time: String, userId: String) {
+        repository.sendMessage(message,time,userId)
+    }
+
+    fun getMessage(userId: String, chatMessages: MutableList<Chat>): LiveData<List<Chat>> {
+        repository.getMessageId(userId,chatMessages)
+        return repository.getChatLive()
     }
 
 }

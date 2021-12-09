@@ -3,24 +3,38 @@ package com.sophia.project_minji.adapter
 import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sophia.project_minji.databinding.ItemContainerReceivedMessageBinding
 import com.sophia.project_minji.databinding.ItemContainerSentMessageBinding
 import com.sophia.project_minji.dataclass.ChatMessage
+import com.sophia.project_minji.entity.Chat
 
 class ChatAdapter(
-    private val chatMessages: ArrayList<ChatMessage>,
-    private val receiverProfileImage: Bitmap,
+    private val chatMessages: ArrayList<Chat>,
+    private val profile: String,
     private val senderId: String
-): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+): ListAdapter<Chat,RecyclerView.ViewHolder>(
+
+    object : DiffUtil.ItemCallback<Chat>() {
+        override fun areItemsTheSame(oldItem: Chat, newItem: Chat): Boolean =
+            oldItem == newItem
+
+        override fun areContentsTheSame(oldItem: Chat, newItem: Chat): Boolean =
+            oldItem.message == newItem.message && oldItem.time == newItem.time
+
+    }
+
+) {
 
     inner class SentMessageViewHolder(
         private val binding: ItemContainerSentMessageBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun setData(chatMessage: ChatMessage) {
+        fun setData(chatMessage: Chat) {
             binding.textMessage.text = chatMessage.message
-            binding.textDateTime.text = chatMessage.dateTime
+            binding.textDateTime.text = chatMessage.time
         }
     }
 
@@ -28,10 +42,9 @@ class ChatAdapter(
         private val binding: ItemContainerReceivedMessageBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun setData(chatMessage: ChatMessage, receiverProfileImage: Bitmap) {
+        fun setData(chatMessage: Chat, profile: String) {
             binding.textMessage.text = chatMessage.message
-            binding.textDateTime.text = chatMessage.dateTime
-            binding.imageProfile.setImageBitmap(receiverProfileImage)
+            binding.textDateTime.text = chatMessage.time
         }
     }
 
@@ -65,7 +78,7 @@ class ChatAdapter(
                 (holder as SentMessageViewHolder).setData(chatMessages[position])
             }
             VIEW_TYPE_RECEIVED -> {
-                (holder as ReceivedMessageViewHolder).setData(chatMessages[position], receiverProfileImage)
+                (holder as ReceivedMessageViewHolder).setData(chatMessages[position],profile)
             }
         }
     }
@@ -73,7 +86,7 @@ class ChatAdapter(
     override fun getItemCount(): Int = chatMessages.size
 
     override fun getItemViewType(position: Int): Int {
-        return if (chatMessages[position].senderId.equals(senderId)) {
+        return if (chatMessages[position].sendId == senderId) {
             VIEW_TYPE_SENT
         } else {
             VIEW_TYPE_RECEIVED
