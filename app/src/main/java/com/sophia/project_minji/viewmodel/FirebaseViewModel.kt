@@ -17,10 +17,17 @@ import kotlinx.coroutines.launch
 
 class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
 
-    fun setUser(name: String, email: String, navigator: CallAnotherActivityNavigator) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.setUser(name, email, navigator)
-        }
+    fun setUser(name: String, image: Uri, navigator: CallAnotherActivityNavigator) {
+        repository.setUser(name, image, navigator)
+    }
+
+    fun userProfile(
+        name: String,
+        isPhotoSelected: Boolean,
+        mImageUri: Uri,
+        navigator: CallAnotherActivityNavigator
+    ) {
+        repository.userProfile(name, isPhotoSelected, mImageUri, navigator)
     }
 
     fun register(
@@ -59,11 +66,11 @@ class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
     }
 
     fun sendMessage(message: String, time: String, userId: String) {
-        repository.sendMessage(message,time,userId)
+        repository.sendMessage(message, time, userId)
     }
 
     fun getMessage(userId: String, chatMessages: MutableList<Chat>): LiveData<List<Chat>> {
-        repository.getMessageId(userId,chatMessages)
+        repository.getMessageId(userId, chatMessages)
         return repository.getChatLive()
     }
 

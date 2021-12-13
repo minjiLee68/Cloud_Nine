@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -13,21 +14,24 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.sophia.project_minji.databinding.ActivityProfileSetUpBinding
+import com.sophia.project_minji.entity.StudentEntity
 import com.sophia.project_minji.listeners.CallAnotherActivityNavigator
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
 import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 
-class ProfileSetUpActivity : AppCompatActivity(),CallAnotherActivityNavigator {
+class ProfileSetUpActivity : AppCompatActivity(), CallAnotherActivityNavigator {
 
     private lateinit var binding: ActivityProfileSetUpBinding
     private lateinit var mImageUri: Uri
@@ -80,53 +84,53 @@ class ProfileSetUpActivity : AppCompatActivity(),CallAnotherActivityNavigator {
     private fun saveBtnClick() {
         binding.save.setOnClickListener {
             binding.progressBar.visibility = View.VISIBLE
-            val name = binding.nickName.text.toString()
-            val imageRef = storageReference.child("Profile_pics").child("$Uid.jpg")
-            if (isPhotoSelected) {
-                if (name.isNotEmpty()) {
-                    val imageRef = storageReference.child("Profile").child("$name.jpg")
-                    imageRef.putFile(mImageUri)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                saveToFireStore(task, name, imageRef)
-                            } else {
-                                Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                        }
-                } else {
-                    Toast.makeText(this, "사진을 선택하고 이름을 적어주세요.", Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                saveToFireStore(null, name, imageRef)
-            }
+            viewmodel.userProfile(binding.nickName.text.toString(), isPhotoSelected, mImageUri, this)
+//            binding.progressBar.visibility = View.VISIBLE
+//            val name = binding.nickName.text.toString()
+//            val imageRef = storageReference.child("Profile_pics").child("$Uid.jpg")
+//            if (isPhotoSelected) {
+//                if (name.isNotEmpty()) {
+//                    val images = storageReference.child("Profile").child("$name.jpg")
+//                    images.putFile(mImageUri).addOnCompleteListener { task ->
+//                        if (task.isSuccessful) {
+//                            saveToFireStore(task, name, images)
+//                        } else {
+//                            Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//                } else {
+//                    Toast.makeText(this, "사진을 선택하고 이름을 적어주세요.", Toast.LENGTH_SHORT).show()
+//                }
+//            } else {
+//                saveToFireStore(null, name, imageRef)
+//            }
         }
     }
 
-    private fun saveToFireStore(
-        task: Task<UploadTask.TaskSnapshot>?,
-        name: String,
-        imageRef: StorageReference
-    ) {
-        if (task != null) {
-            imageRef.downloadUrl.addOnSuccessListener {
-                downloadUri = it
-            }
-        } else {
-            downloadUri = mImageUri
-        }
-
-        viewmodel.setUser(name, downloadUri.toString(), this)
-    }
+//    private fun saveToFireStore(
+//        task: Task<UploadTask.TaskSnapshot>?,
+//        name: String,
+//        imageRef: StorageReference
+//    ) {
+//        if (task != null) {
+//            imageRef.downloadUrl.addOnSuccessListener {
+//                downloadUri = it
+//            }
+//        } else {
+//            downloadUri = mImageUri
+//        }
+//        viewmodel.setUser(name, downloadUri.toString(), this)
+//    }
 
     private fun circleImageClick() {
         binding.profile.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
-            intent.putExtra("crop",true)
+            intent.putExtra("crop", true)
             fileterActivityLauncher.launch(intent)
         }
     }
+
     private fun cropImage(uri: Uri) {
         CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON)
             .setCropShape(CropImageView.CropShape.RECTANGLE)

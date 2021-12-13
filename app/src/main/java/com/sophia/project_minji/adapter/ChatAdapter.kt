@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.sophia.project_minji.databinding.ItemContainerReceivedMessageBinding
 import com.sophia.project_minji.databinding.ItemContainerSentMessageBinding
 import com.sophia.project_minji.dataclass.ChatMessage
@@ -13,9 +14,9 @@ import com.sophia.project_minji.entity.Chat
 
 class ChatAdapter(
     private val chatMessages: ArrayList<Chat>,
-    private val profile: String,
+    private val profile: String?,
     private val senderId: String
-): ListAdapter<Chat,RecyclerView.ViewHolder>(
+) : ListAdapter<Chat, RecyclerView.ViewHolder>(
 
     object : DiffUtil.ItemCallback<Chat>() {
         override fun areItemsTheSame(oldItem: Chat, newItem: Chat): Boolean =
@@ -30,7 +31,7 @@ class ChatAdapter(
 
     inner class SentMessageViewHolder(
         private val binding: ItemContainerSentMessageBinding
-    ): RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun setData(chatMessage: Chat) {
             binding.textMessage.text = chatMessage.message
@@ -40,11 +41,14 @@ class ChatAdapter(
 
     inner class ReceivedMessageViewHolder(
         private val binding: ItemContainerReceivedMessageBinding
-    ): RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun setData(chatMessage: Chat, profile: String) {
             binding.textMessage.text = chatMessage.message
             binding.textDateTime.text = chatMessage.time
+            Glide.with(itemView.context)
+                .load(profile)
+                .into(binding.imageProfile)
         }
     }
 
@@ -78,7 +82,7 @@ class ChatAdapter(
                 (holder as SentMessageViewHolder).setData(chatMessages[position])
             }
             VIEW_TYPE_RECEIVED -> {
-                (holder as ReceivedMessageViewHolder).setData(chatMessages[position],profile)
+                (holder as ReceivedMessageViewHolder).setData(chatMessages[position], profile!!)
             }
         }
     }

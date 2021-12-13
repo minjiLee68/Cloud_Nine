@@ -6,12 +6,15 @@ import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 import com.sophia.project_minji.adapter.StudentGridAdapter
 import com.sophia.project_minji.adapter.StudentLinearAdapter
 import com.sophia.project_minji.entity.Chat
@@ -24,6 +27,7 @@ import kotlin.collections.ArrayList
 
 class FbRepository(context: Context) {
 
+    private lateinit var downloadUri: Uri
     private var storageReference: StorageReference = FirebaseStorage.getInstance().reference
     private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -42,8 +46,8 @@ class FbRepository(context: Context) {
     fun getChatLive(): LiveData<List<Chat>> = _chatLive
 
     //사용자 프로필 만들기
-    fun setUser(name: String, image: String, navigator: CallAnotherActivityNavigator) {
-        val user = User(name, image)
+    fun setUser(name: String, image: Uri, navigator: CallAnotherActivityNavigator) {
+        val user = User(name, image.toString())
         firestore.collection("Users").document(Uid).set(user)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -83,6 +87,45 @@ class FbRepository(context: Context) {
                 }
             }
         }
+    }
+
+    fun userProfile(
+        name: String,
+        isPhotoSelected: Boolean,
+        mImageUri: Uri,
+        navigator: CallAnotherActivityNavigator
+    ) {
+        val imageRef = storageReference.child("Profile_pics").child("$name.jpg")
+        if (isPhotoSelected) {
+            if (name.isNotEmpty()) {
+                val images = storageReference.child("Profile").child("$name.jpg")
+                images.putFile(mImageUri).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        saveToFireStore(task, name, images, mImageUri, navigator)
+                        Log.d("tag", name)
+                    }
+                }
+            }
+        } else {
+            saveToFireStore(null, name, imageRef, mImageUri, navigator)
+        }
+    }
+
+    private fun saveToFireStore(
+        task: Task<UploadTask.TaskSnapshot>?,
+        name: String,
+        imageRef: StorageReference,
+        mImageUri: Uri,
+        navigator: CallAnotherActivityNavigator
+    ) {
+        if (task != null) {
+            imageRef.downloadUrl.addOnSuccessListener { uri ->
+                downloadUri = uri
+            }
+        } else {
+            downloadUri = mImageUri
+        }
+        setUser(name, downloadUri, navigator)
     }
 
     fun setStudentInFor(studentList: MutableList<StudentEntity>): LiveData<List<StudentEntity>> {

@@ -1,8 +1,10 @@
 package com.sophia.project_minji.mypage
 
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.sophia.project_minji.databinding.MypageFragmentBinding
 import com.sophia.project_minji.utillties.Constants
 import com.sophia.project_minji.utillties.PreferenceManager
+import java.net.URI
 
 class MyPageFragment : Fragment() {
 

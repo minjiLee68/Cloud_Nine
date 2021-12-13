@@ -91,8 +91,7 @@ class StudentListFragment : Fragment(), OnItemClickListener {
                 }
             }
         binding.profile.setOnClickListener {
-            val intent =
-                Intent(requireContext().applicationContext, ProfileSetUpActivity::class.java)
+            val intent = Intent(requireContext().applicationContext, ProfileSetUpActivity::class.java)
             startActivity(intent)
         }
     }

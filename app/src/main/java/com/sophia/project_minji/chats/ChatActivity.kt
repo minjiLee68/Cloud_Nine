@@ -1,14 +1,10 @@
 package com.sophia.project_minji.chats
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Base64
-import android.view.View
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -36,9 +32,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var chatMessages: ArrayList<Chat>
     private lateinit var chatAdapter: ChatAdapter
     private lateinit var preferenceManager: PreferenceManager
-    private var conversionId: String? = null
 
-    private lateinit var userAdapter: UsersAdapter
     private lateinit var firestore: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
     private lateinit var uid: String
@@ -46,7 +40,9 @@ class ChatActivity : AppCompatActivity() {
 
     private val now = System.currentTimeMillis()
     private val date = Date(now)
-    private val time = SimpleDateFormat("hh:mm a", Locale.getDefault()).format(date)
+
+    @SuppressLint("SimpleDateFormat")
+    private val time = SimpleDateFormat("hh:mm a").format(date)
 
     private val viewModel by viewModels<FirebaseViewModel> {
         FirebaseViewModelFactory(applicationContext)
@@ -77,14 +73,15 @@ class ChatActivity : AppCompatActivity() {
         val image = preferenceManager.getString("profile")
         chatAdapter = ChatAdapter(chatMessages, image, uid)
         binding.chatRecyclerview.adapter = chatAdapter
-        binding.chatRecyclerview.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
+        binding.chatRecyclerview.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 
     private fun sendComment() {
         val name = preferenceManager.getString("nickName")
         binding.textName.text = name
         binding.layoutSend.setOnClickListener {
-            viewModel.sendMessage(binding.inputMessage.text.toString(), time,userId)
+            viewModel.sendMessage(binding.inputMessage.text.toString(), time, userId)
             binding.inputMessage.text = null
         }
     }
