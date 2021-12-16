@@ -46,11 +46,12 @@ class FbRepository(context: Context) {
     fun getChatLive(): LiveData<List<Chat>> = _chatLive
 
     //사용자 프로필 만들기
-    fun setUser(name: String, image: Uri, navigator: CallAnotherActivityNavigator) {
-        val user = User(name, image.toString())
+    fun setUser(name: String, image: String, navigator: CallAnotherActivityNavigator) {
+        val user = User(name, image)
         firestore.collection("Users").document(Uid).set(user)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    Log.d("tag",Uid)
                     navigator.callActivity()
                     progressBar.visibility = View.GONE
                 } else {
@@ -95,38 +96,41 @@ class FbRepository(context: Context) {
         mImageUri: Uri,
         navigator: CallAnotherActivityNavigator
     ) {
-        val imageRef = storageReference.child("Profile_pics").child("$name.jpg")
+        val imageRef = storageReference.child("Profile_pics").child("$Uid.jpg")
         if (isPhotoSelected) {
+            Log.d("tag",isPhotoSelected.toString())
             if (name.isNotEmpty()) {
-                val images = storageReference.child("Profile").child("$name.jpg")
-                images.putFile(mImageUri).addOnCompleteListener { task ->
+                storageReference.child("Profile").child("$name.jpg")
+                imageRef.putFile(mImageUri).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        saveToFireStore(task, name, images, mImageUri, navigator)
-                        Log.d("tag", name)
+                        imageRef.downloadUrl.addOnSuccessListener { uri ->
+                            downloadUri = uri
+                            setUser(name, downloadUri.toString(), navigator)
+                        }
                     }
                 }
             }
         } else {
-            saveToFireStore(null, name, imageRef, mImageUri, navigator)
+            downloadUri = mImageUri
+            setUser(name, downloadUri.toString(), navigator)
         }
     }
 
-    private fun saveToFireStore(
-        task: Task<UploadTask.TaskSnapshot>?,
-        name: String,
-        imageRef: StorageReference,
-        mImageUri: Uri,
-        navigator: CallAnotherActivityNavigator
-    ) {
-        if (task != null) {
-            imageRef.downloadUrl.addOnSuccessListener { uri ->
-                downloadUri = uri
-            }
-        } else {
-            downloadUri = mImageUri
-        }
-        setUser(name, downloadUri, navigator)
-    }
+//    private fun saveToFireStore(
+//        task: Task<UploadTask.TaskSnapshot>?,
+//        name: String,
+//        imageRef: StorageReference,
+//        mImageUri: Uri,
+//        navigator: CallAnotherActivityNavigator
+//    ) {
+//        if (task != null) {
+//            imageRef.downloadUrl.addOnSuccessListener { uri ->
+//                downloadUri = uri
+//            }
+//        }
+//        downloadUri = mImageUri
+//        setUser(name, downloadUri.toString(), navigator)
+//    }
 
     fun setStudentInFor(studentList: MutableList<StudentEntity>): LiveData<List<StudentEntity>> {
         firestore.collection("Students")

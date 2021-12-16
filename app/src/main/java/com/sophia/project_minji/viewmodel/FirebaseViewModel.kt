@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
 
-    fun setUser(name: String, image: Uri, navigator: CallAnotherActivityNavigator) {
+    fun setUser(name: String, image: String, navigator: CallAnotherActivityNavigator) {
         repository.setUser(name, image, navigator)
     }
 

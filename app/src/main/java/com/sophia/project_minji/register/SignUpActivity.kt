@@ -45,6 +45,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun signUp() {
+        binding.progressBar.visibility = View.VISIBLE
         val email = binding.myEmail.text.toString()
         val password = binding.myPassword.text.toString()
 
@@ -52,6 +53,7 @@ class SignUpActivity : AppCompatActivity() {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
+                        binding.progressBar.visibility = View.GONE
                         startActivity(Intent(this, ProfileSetUpActivity::class.java))
                     } else {
                         Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()

@@ -146,6 +146,7 @@ class ProfileSetUpActivity : AppCompatActivity(), CallAnotherActivityNavigator {
                     }
                     mImageUri = it.data?.data!!
                     binding.profile.setImageURI(mImageUri)
+                    isPhotoSelected = true
                 }
                 CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                     val result = CropImage.getActivityResult(it.data)
