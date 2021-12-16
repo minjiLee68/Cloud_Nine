@@ -88,6 +88,7 @@
 
 ## - 채팅 기능 / 로그아웃
     1. 연결된 선생님들과 채팅할 수 있습니다.
+    2. 로그아웃 아이콘을 누르면 로그아웃 할 수 있습니다.
 <img src="https://user-images.githubusercontent.com/88191880/146412889-3c803160-a8fb-4326-914b-9a0cc2c6c59e.png" width="280" height="600"/> <img src="https://user-images.githubusercontent.com/88191880/146412902-93d3d3e0-01e6-43ab-a47a-e482ba202fd4.png" width="280" height="600"/>
 
 -----------------------------------------
