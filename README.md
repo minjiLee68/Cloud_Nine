@@ -74,8 +74,7 @@
     1. 사용자가 추가한 학생들을 한번에 볼 수 있는 리스트 화면 입니다.
     2. List화면 / Gride화면 두 가지 버전으로 볼 수 있습니다.
     3. 오른쪽 상단에 위치한 프로필을 누르면 프로필을 수정할 수 있는 화면으로 넘어갑니다.
-<img src="https://user-images.githubusercontent.com/88191880/146411410-4bf2ae70-0bbe-4c23-a26f-2a71224bf855.png" width="280" height="600"/>
-<img src="https://user-images.githubusercontent.com/88191880/146411430-0917a48b-2451-4f53-9f3c-b35f9e26e089.png" width="280" height="600"/>
+<img src="https://user-images.githubusercontent.com/88191880/146411410-4bf2ae70-0bbe-4c23-a26f-2a71224bf855.png" width="280" height="600"/> <img src="https://user-images.githubusercontent.com/88191880/146411430-0917a48b-2451-4f53-9f3c-b35f9e26e089.png" width="280" height="600"/>
 
 -----------------------
 
@@ -88,8 +87,7 @@
 
 ## - 채팅 기능 / 로그아웃
     1. 연결된 선생님들과 채팅할 수 있습니다.
-<img src="https://user-images.githubusercontent.com/88191880/146412889-3c803160-a8fb-4326-914b-9a0cc2c6c59e.png" width="280" height="600"/>
-<img src="https://user-images.githubusercontent.com/88191880/146412902-93d3d3e0-01e6-43ab-a47a-e482ba202fd4.png" width="280" height="600"/>
+<img src="https://user-images.githubusercontent.com/88191880/146412889-3c803160-a8fb-4326-914b-9a0cc2c6c59e.png" width="280" height="600"/> <img src="https://user-images.githubusercontent.com/88191880/146412902-93d3d3e0-01e6-43ab-a47a-e482ba202fd4.png" width="280" height="600"/>
 
 -----------------------------------------
 
