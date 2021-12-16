@@ -64,17 +64,18 @@
 
 -------------------------------
 
-## 학생 정보 추가
-    1. 추가하고자 하는 학생의 이름, 생년월일, 전화번호, 학생의 특징,주의 사황등을 기입하고 추가할 수 있습니다.
-<img src="https://user-images.githubusercontent.com/88191880/146411801-654b3020-bdae-4dc4-8c4d-aaa827719abd.png" width="280" height="600"/>
-
------------------------------
-
 ## - 학생들을 볼 수 있는 List 화면
     1. 사용자가 추가한 학생들을 한번에 볼 수 있는 리스트 화면 입니다.
     2. List화면 / Gride화면 두 가지 버전으로 볼 수 있습니다.
     3. 오른쪽 상단에 위치한 프로필을 누르면 프로필을 수정할 수 있는 화면으로 넘어갑니다.
 <img src="https://user-images.githubusercontent.com/88191880/146411410-4bf2ae70-0bbe-4c23-a26f-2a71224bf855.png" width="280" height="600"/> <img src="https://user-images.githubusercontent.com/88191880/146411430-0917a48b-2451-4f53-9f3c-b35f9e26e089.png" width="280" height="600"/>
+
+----------------------------------
+
+## 학생 정보 추가
+    1. 학생 리스트 화면에서 + 버튼을 누릅니다.
+    2. 추가하고자 하는 학생의 이름, 생년월일, 전화번호, 학생의 특징,주의 사황등을 기입하고 추가할 수 있습니다.
+<img src="https://user-images.githubusercontent.com/88191880/146411801-654b3020-bdae-4dc4-8c4d-aaa827719abd.png" width="280" height="600"/>
 
 -----------------------
 
