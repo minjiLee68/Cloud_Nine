@@ -43,6 +43,7 @@ class StudentListFragment : Fragment(), OnItemClickListener {
     private lateinit var linearAdapter: StudentLinearAdapter
     private lateinit var gridAdapter: StudentGridAdapter
     private var studentList: MutableList<StudentEntity> = mutableListOf()
+    private var searchList: MutableList<StudentEntity> = mutableListOf()
 
     private lateinit var preferenceManager: PreferenceManager
 
@@ -80,6 +81,17 @@ class StudentListFragment : Fragment(), OnItemClickListener {
         gridAdapter = StudentGridAdapter(studentList, viewModel, this)
     }
 
+    fun search(searchWord: String, option: String) {
+        firestore.collection("Students").addSnapshotListener { value, error ->
+            for (snapshot in value!!.documents) {
+                if (snapshot.getString(option)!!.contains(searchWord)) {
+                    val item = snapshot.toObject(StudentEntity::class.java)!!
+                    searchList.add(item)
+                }
+            }
+        }
+    }
+
     private fun loadUserDetails() {
         firestore.collection("Users").document(uid).get()
             .addOnCompleteListener { task ->
@@ -91,7 +103,8 @@ class StudentListFragment : Fragment(), OnItemClickListener {
                 }
             }
         binding.profile.setOnClickListener {
-            val intent = Intent(requireContext().applicationContext, ProfileSetUpActivity::class.java)
+            val intent =
+                Intent(requireContext().applicationContext, ProfileSetUpActivity::class.java)
             startActivity(intent)
         }
     }
@@ -122,7 +135,7 @@ class StudentListFragment : Fragment(), OnItemClickListener {
     private fun initRecyclerLinear() {
         binding.stRecyclerview.let {
             it.adapter = linearAdapter
-            it.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
+            it.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         }
     }
 
@@ -130,7 +143,7 @@ class StudentListFragment : Fragment(), OnItemClickListener {
     private fun initRecyclerGrid() {
         binding.stRecyclerview.let {
             it.adapter = gridAdapter
-            it.layoutManager = GridLayoutManager(activity,2)
+            it.layoutManager = GridLayoutManager(activity, 2)
         }
     }
 

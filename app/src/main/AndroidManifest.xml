@@ -16,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_minji">
         <activity
+            android:name="com.sophia.UserPageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserPageActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProfileSetUpActivity"
             android:exported="false" />
         <activity

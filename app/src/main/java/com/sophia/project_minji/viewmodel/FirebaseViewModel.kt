@@ -1,10 +1,8 @@
 package com.sophia.project_minji.viewmodel
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.text.TextUtils
+import androidx.lifecycle.*
 import com.sophia.project_minji.adapter.StudentGridAdapter
 import com.sophia.project_minji.adapter.StudentLinearAdapter
 import com.sophia.project_minji.entity.Chat

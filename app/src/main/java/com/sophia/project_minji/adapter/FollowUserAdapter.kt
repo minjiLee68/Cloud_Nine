@@ -1,20 +1,18 @@
 package com.sophia.project_minji.adapter
 
 import android.content.Intent
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.sophia.project_minji.databinding.ItemContainerUserBinding
-import android.view.LayoutInflater
 import com.bumptech.glide.Glide
-import com.sophia.project_minji.chats.ChatActivity
+import com.sophia.UserPageActivity
+import com.sophia.project_minji.databinding.ItemContainerUserBinding
 import com.sophia.project_minji.entity.User
 import com.sophia.project_minji.utillties.PreferenceManager
-import kotlin.collections.ArrayList
 
-class UsersAdapter( private val users: ArrayList<User>
-) : ListAdapter<User, UsersAdapter.UserViewHolder>(
+class FollowUserAdapter( private val users: ArrayList<User>) : ListAdapter<User, FollowUserAdapter.FollowUserViewHolder>(
 
     object : DiffUtil.ItemCallback<User>() {
         override fun areItemsTheSame(oldItem: User, newItem: User): Boolean =
@@ -26,7 +24,7 @@ class UsersAdapter( private val users: ArrayList<User>
     }
 
 ) {
-    inner class UserViewHolder(
+    inner class FollowUserViewHolder(
         private val binding: ItemContainerUserBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -39,18 +37,18 @@ class UsersAdapter( private val users: ArrayList<User>
                 .into(binding.imageProfile)
 
             binding.root.setOnClickListener {
-                val chatIntent = Intent(itemView.context, ChatActivity::class.java)
+                val chatIntent = Intent(itemView.context, UserPageActivity::class.java)
                 chatIntent.putExtra("userId", user.userId)
-                preferenceManager.putString("userId",user.userId)
                 itemView.context.startActivity(chatIntent)
+                preferenceManager.putString("userId", user.userId)
                 preferenceManager.putString("nickName", user.name)
                 preferenceManager.putString("profile", user.image)
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder =
-        UserViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowUserViewHolder =
+        FollowUserViewHolder(
             ItemContainerUserBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -58,8 +56,8 @@ class UsersAdapter( private val users: ArrayList<User>
             )
         )
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        val userList = users[position]
-        holder.setUserData(userList)
+    override fun onBindViewHolder(holder: FollowUserViewHolder, position: Int) {
+        val followUsers = users[position]
+        holder.setUserData(followUsers)
     }
 }

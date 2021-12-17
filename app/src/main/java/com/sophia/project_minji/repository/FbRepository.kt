@@ -116,22 +116,6 @@ class FbRepository(context: Context) {
         }
     }
 
-//    private fun saveToFireStore(
-//        task: Task<UploadTask.TaskSnapshot>?,
-//        name: String,
-//        imageRef: StorageReference,
-//        mImageUri: Uri,
-//        navigator: CallAnotherActivityNavigator
-//    ) {
-//        if (task != null) {
-//            imageRef.downloadUrl.addOnSuccessListener { uri ->
-//                downloadUri = uri
-//            }
-//        }
-//        downloadUri = mImageUri
-//        setUser(name, downloadUri.toString(), navigator)
-//    }
-
     fun setStudentInFor(studentList: MutableList<StudentEntity>): LiveData<List<StudentEntity>> {
         firestore.collection("Students")
             .whereEqualTo("user", Uid)
@@ -163,7 +147,6 @@ class FbRepository(context: Context) {
             }
         return _studentLive
     }
-
 
     //학생정보 삭제
     fun deleteStudent(position: Int) {

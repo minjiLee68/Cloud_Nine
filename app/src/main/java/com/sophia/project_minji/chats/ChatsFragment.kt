@@ -1,38 +1,25 @@
 package com.sophia.project_minji.chats
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.messaging.FirebaseMessaging
-import com.sophia.project_minji.adapter.StudentGridAdapter
-import com.sophia.project_minji.adapter.StudentLinearAdapter
 import com.sophia.project_minji.register.SignInActivity
 import com.sophia.project_minji.adapter.UsersAdapter
 import com.sophia.project_minji.databinding.ChatsFragmentBinding
 import com.sophia.project_minji.entity.User
-import com.sophia.project_minji.listeners.UserListener
-import com.sophia.project_minji.utillties.Constants
 import com.sophia.project_minji.utillties.PreferenceManager
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
 import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
 
-class ChatsFragment : Fragment(), UserListener {
+class ChatsFragment : Fragment() {
 
     private var _binding: ChatsFragmentBinding? = null
     val binding: ChatsFragmentBinding
@@ -99,7 +86,7 @@ class ChatsFragment : Fragment(), UserListener {
     }
 
     private fun initRecyclerView() {
-        userAdapter = UsersAdapter(users, this)
+        userAdapter = UsersAdapter(users)
         binding.userRecyclerView.adapter = userAdapter
         binding.userRecyclerView.visibility = View.VISIBLE
         binding.userRecyclerView.layoutManager =
@@ -180,10 +167,5 @@ class ChatsFragment : Fragment(), UserListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onUserClicked(user: User) {
-        val intent = Intent(requireContext().applicationContext, ChatActivity::class.java)
-        startActivity(intent)
     }
 }

@@ -1,21 +1,25 @@
 package com.sophia.project_minji.mypage
 
-import android.graphics.BitmapFactory
-import android.net.Uri
+import android.content.Intent
 import android.os.Bundle
-import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.sophia.UserPageActivity
+import com.sophia.project_minji.ProfileSetUpActivity
+import com.sophia.project_minji.adapter.FollowUserAdapter
+import com.sophia.project_minji.adapter.UsersAdapter
 import com.sophia.project_minji.databinding.MypageFragmentBinding
-import com.sophia.project_minji.utillties.Constants
+import com.sophia.project_minji.entity.User
 import com.sophia.project_minji.utillties.PreferenceManager
-import java.net.URI
+import com.sophia.project_minji.viewmodel.FirebaseViewModel
+import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
 
 class MyPageFragment : Fragment() {
 
@@ -26,6 +30,14 @@ class MyPageFragment : Fragment() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
     private lateinit var uid: String
+    private lateinit var userAdapter: FollowUserAdapter
+    private val users: ArrayList<User> = ArrayList()
+
+    private lateinit var preferenceManager: PreferenceManager
+
+    private val viewModel by viewModels<FirebaseViewModel> {
+        FirebaseViewModelFactory(requireContext().applicationContext)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,12 +53,37 @@ class MyPageFragment : Fragment() {
 
         init()
         loadUserDetails()
+        setListener()
+        initRecyclerView()
+        getUserObserver()
     }
 
     private fun init() {
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         uid = auth.currentUser?.uid.toString()
+        preferenceManager = PreferenceManager(requireContext())
+    }
+
+    private fun setListener() {
+        binding.profileSetting.setOnClickListener {
+            val intent = Intent(requireContext().applicationContext, ProfileSetUpActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun initRecyclerView() {
+        userAdapter = FollowUserAdapter(users)
+        binding.userRecyclerView.adapter = userAdapter
+        binding.userRecyclerView.visibility = View.VISIBLE
+        binding.userRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+    }
+
+    private fun getUserObserver() {
+        viewModel.getUsers(users).observe(viewLifecycleOwner, {
+            userAdapter.submitList(it)
+        })
     }
 
     private fun loadUserDetails() {
@@ -62,7 +99,6 @@ class MyPageFragment : Fragment() {
                 }
             }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

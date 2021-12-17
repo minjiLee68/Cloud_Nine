@@ -7,6 +7,7 @@
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/drawable/background_icon.xml" value="0.24071661237785016" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/drawable/background_image.xml" value="0.24071661237785016" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/drawable/background_received_message.xml" value="0.24071661237785016" />
+        <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/drawable/background_search.xml" value="0.24071661237785016" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/drawable/background_sent_message.xml" value="0.24071661237785016" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/drawable/dialog_background.xml" value="0.24071661237785016" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/drawable/edit_background.xml" value="0.24071661237785016" />
@@ -18,11 +19,13 @@
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/activity_profile_set_up.xml" value="0.2" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/activity_sign_in.xml" value="0.21180555555555555" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/activity_sign_up.xml" value="0.25" />
+        <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/activity_user_page.xml" value="0.23289473684210527" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/calendar_fragment.xml" value="0.22" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/chats_fragment.xml" value="0.22" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/item_container_received_message.xml" value="0.18819655521783182" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/item_container_sent_message.xml" value="0.23055555555555557" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/item_container_user.xml" value="0.23055555555555557" />
+        <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/item_user_follow.xml" value="0.23289473684210527" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/mypage_fragment.xml" value="0.23055555555555557" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/rv_item_gride.xml" value="0.22" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/rv_item_linear.xml" value="0.33" />
@@ -31,6 +34,7 @@
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/todo_dialog.xml" value="0.23061889250814332" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/layout/todo_item.xml" value="0.23061889250814332" />
         <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/menu/popup_menu.xml" value="0.3277777777777778" />
+        <entry key="..\:/Users/liisiim/AndroidStudioProjects/Project_minji/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.24071661237785016" />
       </map>
     </option>
   </component>
