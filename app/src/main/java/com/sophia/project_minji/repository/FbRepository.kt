@@ -201,29 +201,36 @@ class FbRepository(context: Context) {
         return _userLive
     }
 
-    fun getFollowUser(
-        userList: MutableList<FollowUser>,
-        userId: String
-    ): LiveData<List<FollowUser>> {
+    fun setFollowUser(userId: String) {
+        firestore.collection("Users").document(userId).get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    if (task.result!!.exists()) {
+                        val name = task.result!!.getString("name")!!
+                        val image = task.result!!.getString("image")!!
+                        val followUser = FollowUser(name, image)
+                        firestore.collection("FollowUser").document(userId).set(followUser)
+                    }
+                }
+            }
+    }
 
+    fun getFollowUser(userList: MutableList<FollowUser>): LiveData<List<FollowUser>> {
         val database: FirebaseFirestore = FirebaseFirestore.getInstance()
-        database.collection("Users").document(userId)
-            .addSnapshotListener { value, _ ->
-                if (value != null) {
-                    val usersId = value.id
-                    val user = value.toObject(FollowUser::class.java)!!
-                    user.name = value.getString("name")!!
-                    user.image = value.getString("image")!!
-                    user.userId = usersId
+        database.collection("FollowUser").addSnapshotListener { value, _ ->
+            for (dc: DocumentChange in value!!.documentChanges) {
+                if (dc.type == DocumentChange.Type.ADDED) {
+                    val user = dc.document.toObject(FollowUser::class.java)
+                    val userId = dc.document.id
+                    user.name = dc.document.getString("name")!!
+                    user.image = dc.document.getString("image")!!
+                    user.userId = userId
 
                     userList.add(user)
-                    Log.d("id",userId)
-                    Log.d("valueId",value.id)
-                    Log.d("name",user.name)
-                    Log.d("image",user.image)
                     _followUserLive.value = userList
                 }
             }
+        }
         return _followUserLive
     }
 

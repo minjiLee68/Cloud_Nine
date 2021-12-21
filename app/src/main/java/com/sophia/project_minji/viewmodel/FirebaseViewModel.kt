@@ -73,12 +73,13 @@ class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
         return repository.getChatLive()
     }
 
-    fun getFollowUsers(
-        userList: MutableList<FollowUser>,
-        userId: String
-    ): LiveData<List<FollowUser>> {
-        repository.getFollowUser(userList, userId)
+    fun getFollowUsers(userList: MutableList<FollowUser>): LiveData<List<FollowUser>> {
+        repository.getFollowUser(userList)
         return repository.getFollowUserLive()
+    }
+
+    fun setFollowUser(userId: String) {
+        repository.setFollowUser(userId)
     }
 
 }

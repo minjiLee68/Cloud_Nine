@@ -96,8 +96,7 @@ class ChatsFragment : Fragment() {
     }
 
     private fun getUserObserver() {
-        val usersId = preferenceManager.getString("followingId")
-        viewModel.getFollowUsers(users, usersId).observe(viewLifecycleOwner, {
+        viewModel.getFollowUsers(users).observe(viewLifecycleOwner, {
             userAdapter.submitList(it)
         })
     }

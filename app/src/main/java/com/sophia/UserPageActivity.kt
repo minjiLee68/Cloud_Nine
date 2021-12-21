@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -12,6 +13,8 @@ import com.sophia.project_minji.entity.Chat
 import com.sophia.project_minji.entity.FollowDto
 import com.sophia.project_minji.entity.FollowUser
 import com.sophia.project_minji.utillties.PreferenceManager
+import com.sophia.project_minji.viewmodel.FirebaseViewModel
+import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
 
 class UserPageActivity : AppCompatActivity() {
 
@@ -22,6 +25,10 @@ class UserPageActivity : AppCompatActivity() {
     private lateinit var uid: String
     private lateinit var preferenceManager: PreferenceManager
 
+    private val viewModel by viewModels<FirebaseViewModel> {
+        FirebaseViewModelFactory(applicationContext)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserPageBinding.inflate(layoutInflater)
@@ -30,7 +37,6 @@ class UserPageActivity : AppCompatActivity() {
         init()
         getFolloerAndFollowing()
         detailUser()
-        binding.followBtn.setOnClickListener { requestFollow() }
     }
 
     private fun init() {
@@ -38,6 +44,7 @@ class UserPageActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         uid = auth.currentUser?.uid.toString()
         preferenceManager = PreferenceManager(applicationContext)
+        binding.followBtn.setOnClickListener { requestFollow() }
     }
 
     private fun detailUser() {
@@ -56,7 +63,8 @@ class UserPageActivity : AppCompatActivity() {
     }
 
     private fun requestFollow() {
-        val userId = preferenceManager.getString("followUserId")!!
+        val userId = preferenceManager.getString("followUserId")
+        viewModel.setFollowUser(userId)
         val followingUser = firestore.collection("follow").document(uid)
         firestore.runTransaction {
             var followDto = it.get(followingUser).toObject(FollowDto::class.java)
@@ -77,17 +85,9 @@ class UserPageActivity : AppCompatActivity() {
                         //팔로우
                         followingCount += 1
                         followings[userId] = true
-                        preferenceManager.putString("followingId", userId)
                     }
                 }
             }
-//            if (followDto.followings.containsKey(userId)) {
-//                followDto.followingCount = followDto.followingCount - 1
-//                followDto.followers.remove(userId)
-//            } else {
-//                followDto.followingCount = followDto.followingCount + 1
-//                followDto.followings[userId] = true
-//            }
             it.set(followingUser, followDto)
             return@runTransaction
         }
@@ -115,29 +115,21 @@ class UserPageActivity : AppCompatActivity() {
                     }
                 }
             }
-//            if (followDto!!.followers.containsKey(uid)) {
-//                followDto!!.followerCount = followDto!!.followerCount - 1
-//                followDto!!.followers.remove(uid)
-//            } else {
-//                followDto!!.followerCount = followDto!!.followerCount + 1
-//                followDto!!.followers[uid] = true
-//            }
             it.set(followerUser, followDto!!)
             return@runTransaction
         }
     }
 
     private fun getFolloerAndFollowing() {
-        val userId = preferenceManager.getString("userId")!!
+        val userId = preferenceManager.getString("userId")
         firestore.collection("follow").document(userId).addSnapshotListener { value, _ ->
             if (value != null) {
-                val followDTO = value.toObject(FollowDto::class.java)
-
-                if (followDTO?.followingCount != null) {
-                    binding.following.text = followDTO.followingCount.toString()
+                val followDto = value.toObject(FollowDto::class.java)
+                if (followDto?.followingCount != null) {
+                    binding.following.text = followDto.followingCount.toString()
                 }
-                if (followDTO?.followerCount != null) {
-                    binding.follower.text = followDTO.followerCount.toString()
+                if (followDto?.followerCount != null) {
+                    binding.follower.text = followDto.followerCount.toString()
                 }
             }
         }
