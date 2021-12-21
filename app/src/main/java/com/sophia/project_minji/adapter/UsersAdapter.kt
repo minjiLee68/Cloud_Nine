@@ -9,18 +9,19 @@ import com.sophia.project_minji.databinding.ItemContainerUserBinding
 import android.view.LayoutInflater
 import com.bumptech.glide.Glide
 import com.sophia.project_minji.chats.ChatActivity
+import com.sophia.project_minji.entity.FollowUser
 import com.sophia.project_minji.entity.User
 import com.sophia.project_minji.utillties.PreferenceManager
 import kotlin.collections.ArrayList
 
-class UsersAdapter( private val users: ArrayList<User>
-) : ListAdapter<User, UsersAdapter.UserViewHolder>(
+class UsersAdapter( private val users: ArrayList<FollowUser>
+) : ListAdapter<FollowUser, UsersAdapter.UserViewHolder>(
 
-    object : DiffUtil.ItemCallback<User>() {
-        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean =
+    object : DiffUtil.ItemCallback<FollowUser>() {
+        override fun areItemsTheSame(oldItem: FollowUser, newItem: FollowUser): Boolean =
             oldItem == newItem
 
-        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean =
+        override fun areContentsTheSame(oldItem: FollowUser, newItem: FollowUser): Boolean =
             oldItem.name == newItem.name && oldItem.image == newItem.image
 
     }
@@ -32,7 +33,7 @@ class UsersAdapter( private val users: ArrayList<User>
 
         val preferenceManager: PreferenceManager = PreferenceManager(itemView.context)
 
-        fun setUserData(user: User) {
+        fun setUserData(user: FollowUser) {
             binding.textName.text = user.name
             Glide.with(itemView.context)
                 .load(user.image)

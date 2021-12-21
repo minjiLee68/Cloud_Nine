@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.sophia.project_minji.adapter.StudentGridAdapter
 import com.sophia.project_minji.adapter.StudentLinearAdapter
 import com.sophia.project_minji.entity.Chat
+import com.sophia.project_minji.entity.FollowUser
 import com.sophia.project_minji.entity.StudentEntity
 import com.sophia.project_minji.entity.User
 import com.sophia.project_minji.listeners.CallAnotherActivityNavigator
@@ -70,6 +71,14 @@ class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
     fun getMessage(userId: String, chatMessages: MutableList<Chat>): LiveData<List<Chat>> {
         repository.getMessageId(userId, chatMessages)
         return repository.getChatLive()
+    }
+
+    fun getFollowUsers(
+        userList: MutableList<FollowUser>,
+        userId: String
+    ): LiveData<List<FollowUser>> {
+        repository.getFollowUser(userList, userId)
+        return repository.getFollowUserLive()
     }
 
 }

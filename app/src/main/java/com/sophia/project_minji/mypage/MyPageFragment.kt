@@ -10,12 +10,15 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sophia.UserPageActivity
 import com.sophia.project_minji.ProfileSetUpActivity
 import com.sophia.project_minji.adapter.FollowUserAdapter
 import com.sophia.project_minji.adapter.UsersAdapter
 import com.sophia.project_minji.databinding.MypageFragmentBinding
+import com.sophia.project_minji.entity.FollowDto
+import com.sophia.project_minji.entity.FollowUser
 import com.sophia.project_minji.entity.User
 import com.sophia.project_minji.utillties.PreferenceManager
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
@@ -56,6 +59,7 @@ class MyPageFragment : Fragment() {
         setListener()
         initRecyclerView()
         getUserObserver()
+        followers()
     }
 
     private fun init() {
@@ -67,7 +71,8 @@ class MyPageFragment : Fragment() {
 
     private fun setListener() {
         binding.profileSetting.setOnClickListener {
-            val intent = Intent(requireContext().applicationContext, ProfileSetUpActivity::class.java)
+            val intent =
+                Intent(requireContext().applicationContext, ProfileSetUpActivity::class.java)
             startActivity(intent)
         }
     }
@@ -98,6 +103,19 @@ class MyPageFragment : Fragment() {
                     }
                 }
             }
+    }
+
+    private fun followers() {
+        firestore.collection("follow").document(uid).addSnapshotListener { value, _ ->
+            if (value != null) {
+                val followDto = value.toObject(FollowDto::class.java)
+                if (followDto?.followingCount != null) {
+                    binding.following.text = followDto.followingCount.toString()
+                } else if (followDto?.followerCount != null) {
+                    binding.follower.text = followDto.followerCount.toString()
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

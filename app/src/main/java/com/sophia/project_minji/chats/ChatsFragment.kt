@@ -2,6 +2,7 @@ package com.sophia.project_minji.chats
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.sophia.project_minji.register.SignInActivity
 import com.sophia.project_minji.adapter.UsersAdapter
 import com.sophia.project_minji.databinding.ChatsFragmentBinding
+import com.sophia.project_minji.entity.FollowUser
 import com.sophia.project_minji.entity.User
 import com.sophia.project_minji.utillties.PreferenceManager
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
@@ -29,7 +31,7 @@ class ChatsFragment : Fragment() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
     private lateinit var uid: String
-    private val users: ArrayList<User> = ArrayList()
+    private val users: ArrayList<FollowUser> = ArrayList()
     private lateinit var preferenceManager: PreferenceManager
 
     private val viewModel by viewModels<FirebaseViewModel> {
@@ -94,7 +96,8 @@ class ChatsFragment : Fragment() {
     }
 
     private fun getUserObserver() {
-        viewModel.getUsers(users).observe(viewLifecycleOwner, {
+        val usersId = preferenceManager.getString("followingId")
+        viewModel.getFollowUsers(users, usersId).observe(viewLifecycleOwner, {
             userAdapter.submitList(it)
         })
     }

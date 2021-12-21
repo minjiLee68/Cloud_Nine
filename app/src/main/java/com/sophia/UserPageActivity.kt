@@ -8,7 +8,9 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sophia.project_minji.databinding.ActivityUserPageBinding
+import com.sophia.project_minji.entity.Chat
 import com.sophia.project_minji.entity.FollowDto
+import com.sophia.project_minji.entity.FollowUser
 import com.sophia.project_minji.utillties.PreferenceManager
 
 class UserPageActivity : AppCompatActivity() {
@@ -39,8 +41,7 @@ class UserPageActivity : AppCompatActivity() {
     }
 
     private fun detailUser() {
-        val userId = preferenceManager.getString("userId")
-
+        val userId = intent.getStringExtra("followUserId").toString()
         firestore.collection("Users").document(userId).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -55,8 +56,7 @@ class UserPageActivity : AppCompatActivity() {
     }
 
     private fun requestFollow() {
-        val userId = preferenceManager.getString("userId")
-
+        val userId = preferenceManager.getString("followUserId")!!
         val followingUser = firestore.collection("follow").document(uid)
         firestore.runTransaction {
             var followDto = it.get(followingUser).toObject(FollowDto::class.java)
@@ -64,8 +64,8 @@ class UserPageActivity : AppCompatActivity() {
                 followDto = FollowDto()
                 followDto.followingCount = 1
                 followDto.followings[userId] = true
+                it.set(followingUser, followDto)
 
-                it.set(followingUser, followDto!!)
                 return@runTransaction
             } else {
                 with(followDto) {
@@ -77,6 +77,7 @@ class UserPageActivity : AppCompatActivity() {
                         //팔로우
                         followingCount += 1
                         followings[userId] = true
+                        preferenceManager.putString("followingId", userId)
                     }
                 }
             }
@@ -127,23 +128,16 @@ class UserPageActivity : AppCompatActivity() {
     }
 
     private fun getFolloerAndFollowing() {
-        val userId = preferenceManager.getString("userId")
+        val userId = preferenceManager.getString("userId")!!
         firestore.collection("follow").document(userId).addSnapshotListener { value, _ ->
             if (value != null) {
                 val followDTO = value.toObject(FollowDto::class.java)
 
                 if (followDTO?.followingCount != null) {
                     binding.following.text = followDTO.followingCount.toString()
-                    Log.d("tag", followDTO.followingCount.toString())
                 }
                 if (followDTO?.followerCount != null) {
                     binding.follower.text = followDTO.followerCount.toString()
-
-                    if (followDTO.followers.containsKey(userId)) {
-                        binding.followBtn.text = "언팔로우"
-                    } else if (uid != userId) {
-                        binding.followBtn.text = "팔로우"
-                    }
                 }
             }
         }

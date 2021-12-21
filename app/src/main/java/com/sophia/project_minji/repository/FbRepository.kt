@@ -17,9 +17,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.sophia.project_minji.adapter.StudentGridAdapter
 import com.sophia.project_minji.adapter.StudentLinearAdapter
-import com.sophia.project_minji.entity.Chat
-import com.sophia.project_minji.entity.StudentEntity
-import com.sophia.project_minji.entity.User
+import com.sophia.project_minji.entity.*
 import com.sophia.project_minji.listeners.CallAnotherActivityNavigator
 import com.sophia.project_minji.utillties.Constants
 import com.sophia.project_minji.utillties.PreferenceManager
@@ -34,13 +32,14 @@ class FbRepository(context: Context) {
     private var Uid: String = auth.currentUser?.uid.toString()
     private var progressBar: ProgressBar = ProgressBar(context)
 
-    private val preferenceManager: PreferenceManager = PreferenceManager(context)
-
     private val _studentLive = MutableLiveData<List<StudentEntity>>()
     fun getStudentLive(): LiveData<List<StudentEntity>> = _studentLive
 
     private val _userLive = MutableLiveData<List<User>>()
     fun getUserLive(): LiveData<List<User>> = _userLive
+
+    private val _followUserLive = MutableLiveData<List<FollowUser>>()
+    fun getFollowUserLive(): LiveData<List<FollowUser>> = _followUserLive
 
     private val _chatLive = MutableLiveData<List<Chat>>()
     fun getChatLive(): LiveData<List<Chat>> = _chatLive
@@ -51,7 +50,7 @@ class FbRepository(context: Context) {
         firestore.collection("Users").document(Uid).set(user)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Log.d("tag",Uid)
+                    Log.d("tag", Uid)
                     navigator.callActivity()
                     progressBar.visibility = View.GONE
                 } else {
@@ -98,7 +97,6 @@ class FbRepository(context: Context) {
     ) {
         val imageRef = storageReference.child("Profile_pics").child("$Uid.jpg")
         if (isPhotoSelected) {
-            Log.d("tag",isPhotoSelected.toString())
             if (name.isNotEmpty()) {
                 storageReference.child("Profile").child("$name.jpg")
                 imageRef.putFile(mImageUri).addOnCompleteListener { task ->
@@ -202,6 +200,33 @@ class FbRepository(context: Context) {
         }
         return _userLive
     }
+
+    fun getFollowUser(
+        userList: MutableList<FollowUser>,
+        userId: String
+    ): LiveData<List<FollowUser>> {
+
+        val database: FirebaseFirestore = FirebaseFirestore.getInstance()
+        database.collection("Users").document(userId)
+            .addSnapshotListener { value, _ ->
+                if (value != null) {
+                    val usersId = value.id
+                    val user = value.toObject(FollowUser::class.java)!!
+                    user.name = value.getString("name")!!
+                    user.image = value.getString("image")!!
+                    user.userId = usersId
+
+                    userList.add(user)
+                    Log.d("id",userId)
+                    Log.d("valueId",value.id)
+                    Log.d("name",user.name)
+                    Log.d("image",user.image)
+                    _followUserLive.value = userList
+                }
+            }
+        return _followUserLive
+    }
+
 
     fun sendMessage(message: String, time: String, userId: String) {
         firestore.collection("Users").document(Uid).get()
