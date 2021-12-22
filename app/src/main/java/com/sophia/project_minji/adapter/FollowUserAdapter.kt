@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.sophia.UserPageActivity
+import com.sophia.project_minji.userPage.UserPageActivity
 import com.sophia.project_minji.databinding.ItemContainerUserBinding
-import com.sophia.project_minji.entity.User
+import com.sophia.project_minji.dataclass.User
 import com.sophia.project_minji.utillties.PreferenceManager
 
 class FollowUserAdapter( private val users: ArrayList<User>) : ListAdapter<User, FollowUserAdapter.FollowUserViewHolder>(

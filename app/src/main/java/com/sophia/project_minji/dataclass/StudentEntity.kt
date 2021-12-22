@@ -1,8 +1,7 @@
-package com.sophia.project_minji.entity
+package com.sophia.project_minji.dataclass
 
 import androidx.annotation.NonNull
 import com.google.firebase.firestore.Exclude
-import java.util.*
 
 data class StudentEntity(
     var name: String = "",

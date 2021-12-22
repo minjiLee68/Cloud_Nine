@@ -6,22 +6,18 @@ import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
-import com.sophia.project_minji.adapter.StudentGridAdapter
-import com.sophia.project_minji.adapter.StudentLinearAdapter
+import com.sophia.project_minji.dataclass.Chat
+import com.sophia.project_minji.dataclass.FollowUser
+import com.sophia.project_minji.dataclass.StudentEntity
+import com.sophia.project_minji.dataclass.User
 import com.sophia.project_minji.entity.*
 import com.sophia.project_minji.listeners.CallAnotherActivityNavigator
-import com.sophia.project_minji.utillties.Constants
-import com.sophia.project_minji.utillties.PreferenceManager
-import kotlin.collections.ArrayList
 
 class FbRepository(context: Context) {
 

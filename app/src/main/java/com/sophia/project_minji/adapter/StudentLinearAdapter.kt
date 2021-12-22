@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sophia.project_minji.R
 import com.sophia.project_minji.databinding.RvItemLinearBinding
-import com.sophia.project_minji.entity.StudentEntity
+import com.sophia.project_minji.dataclass.StudentEntity
 import com.sophia.project_minji.listeners.OnItemClickListener
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
 

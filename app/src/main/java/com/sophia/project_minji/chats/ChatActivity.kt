@@ -2,20 +2,15 @@ package com.sophia.project_minji.chats
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-import com.google.firebase.firestore.EventListener
 import com.sophia.project_minji.adapter.ChatAdapter
-import com.sophia.project_minji.adapter.UsersAdapter
 import com.sophia.project_minji.databinding.ActivityChatBinding
-import com.sophia.project_minji.dataclass.ChatMessage
+import com.sophia.project_minji.dataclass.Chat
 import com.sophia.project_minji.dataclass.User
-import com.sophia.project_minji.entity.Chat
 import com.sophia.project_minji.utillties.Constants
 import com.sophia.project_minji.utillties.PreferenceManager
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
@@ -23,7 +18,6 @@ import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class ChatActivity : AppCompatActivity() {
 
@@ -67,6 +61,8 @@ class ChatActivity : AppCompatActivity() {
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         uid = auth.currentUser?.uid.toString()
+
+        binding.imageBack.setOnClickListener { onBackPressed() }
     }
 
     private fun initRecyclerView() {

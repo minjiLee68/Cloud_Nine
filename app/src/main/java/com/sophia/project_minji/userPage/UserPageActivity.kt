@@ -1,17 +1,13 @@
-package com.sophia
+package com.sophia.project_minji.userPage
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sophia.project_minji.databinding.ActivityUserPageBinding
-import com.sophia.project_minji.entity.Chat
-import com.sophia.project_minji.entity.FollowDto
-import com.sophia.project_minji.entity.FollowUser
+import com.sophia.project_minji.dataclass.FollowDto
 import com.sophia.project_minji.utillties.PreferenceManager
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
 import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
@@ -49,6 +45,41 @@ class UserPageActivity : AppCompatActivity() {
         preferenceManager = PreferenceManager(applicationContext)
         binding.followBtn.setOnClickListener { requestFollow() }
     }
+
+//    private fun createFragment() {
+//        newFriendsFrag = NewFriendsFragment()
+//    }
+//
+//    private fun createViewPager() {
+//        pagerAdapter = PagerAdapter(childFragmentManager, lifecycle)
+//        pagerAdapter.addFragment(newFriendsFrag)
+//        binding.viewPager2.adapter = pagerAdapter
+//        binding.viewPager2.isUserInputEnabled = false
+//    }
+//
+//    private fun settingTabLayout() {
+//        binding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+//            override fun onTabSelected(tab: TabLayout.Tab?) {
+//                when(tab?.position) {
+//                    0 -> {
+//                        binding.viewPager2.currentItem = 0
+//                    }
+//                    1 -> {
+//                        binding.viewPager2.currentItem = 1
+//                    }
+//                }
+//            }
+//
+//            override fun onTabUnselected(tab: TabLayout.Tab?) {
+//
+//            }
+//
+//            override fun onTabReselected(tab: TabLayout.Tab?) {
+//
+//            }
+//
+//        })
+//    }
 
     private fun detailUser() {
         firestore.collection("Users").document(userId).get()

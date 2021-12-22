@@ -1,4 +1,4 @@
-package com.sophia.project_minji.entity
+package com.sophia.project_minji.dataclass
 
 import java.util.*
 

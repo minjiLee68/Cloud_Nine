@@ -9,8 +9,7 @@ import com.sophia.project_minji.databinding.ItemContainerUserBinding
 import android.view.LayoutInflater
 import com.bumptech.glide.Glide
 import com.sophia.project_minji.chats.ChatActivity
-import com.sophia.project_minji.entity.FollowUser
-import com.sophia.project_minji.entity.User
+import com.sophia.project_minji.dataclass.FollowUser
 import com.sophia.project_minji.utillties.PreferenceManager
 import kotlin.collections.ArrayList
 

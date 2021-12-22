@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sophia.UserPageActivity">
+    tools:context=".userPage.UserPageActivity">
 
     <View
         android:id="@+id/v_background"
@@ -108,5 +108,7 @@
         app:layout_constraintEnd_toStartOf="@id/following_tv"
         app:layout_constraintStart_toEndOf="@id/my_profile"
         app:layout_constraintTop_toBottomOf="@id/following" />
+
+    
 
 </androidx.constraintlayout.widget.ConstraintLayout>

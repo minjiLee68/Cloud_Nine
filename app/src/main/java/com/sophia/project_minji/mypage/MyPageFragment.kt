@@ -7,22 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
-import com.sophia.UserPageActivity
 import com.sophia.project_minji.ProfileSetUpActivity
-import com.sophia.project_minji.adapter.FollowUserAdapter
 import com.sophia.project_minji.adapter.PagerAdapter
-import com.sophia.project_minji.adapter.UsersAdapter
 import com.sophia.project_minji.databinding.MypageFragmentBinding
-import com.sophia.project_minji.entity.FollowDto
-import com.sophia.project_minji.entity.FollowUser
-import com.sophia.project_minji.entity.User
+import com.sophia.project_minji.dataclass.FollowDto
 import com.sophia.project_minji.utillties.PreferenceManager
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
 import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
@@ -117,20 +109,6 @@ class MyPageFragment : Fragment() {
         }
     }
 
-//    private fun initRecyclerView() {
-//        userAdapter = FollowUserAdapter(users)
-//        binding.userRecyclerView.adapter = userAdapter
-//        binding.userRecyclerView.visibility = View.VISIBLE
-//        binding.userRecyclerView.layoutManager =
-//            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-//    }
-//
-//    private fun getUserObserver() {
-//        viewModel.getUsers(users).observe(viewLifecycleOwner, {
-//            userAdapter.submitList(it)
-//        })
-//    }
-
     private fun loadUserDetails() {
         firestore.collection("Users").document(uid).get()
             .addOnCompleteListener { task ->
@@ -151,7 +129,8 @@ class MyPageFragment : Fragment() {
                 val followDto = value.toObject(FollowDto::class.java)
                 if (followDto?.followingCount != null) {
                     binding.following.text = followDto.followingCount.toString()
-                } else if (followDto?.followerCount != null) {
+                }
+                if (followDto?.followerCount != null) {
                     binding.follower.text = followDto.followerCount.toString()
                 }
             }

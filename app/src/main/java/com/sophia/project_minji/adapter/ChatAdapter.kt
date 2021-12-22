@@ -1,6 +1,5 @@
 package com.sophia.project_minji.adapter
 
-import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sophia.project_minji.databinding.ItemContainerReceivedMessageBinding
 import com.sophia.project_minji.databinding.ItemContainerSentMessageBinding
-import com.sophia.project_minji.dataclass.ChatMessage
-import com.sophia.project_minji.entity.Chat
+import com.sophia.project_minji.dataclass.Chat
 
 class ChatAdapter(
     private val chatMessages: ArrayList<Chat>,

@@ -1,24 +1,15 @@
 package com.sophia.project_minji.studentinfor
 
-import android.content.ContentValues
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.sophia.project_minji.databinding.StudentInforActivityBinding
-import com.sophia.project_minji.entity.StudentEntity
-import com.sophia.project_minji.listeners.OnItemClickListener
-import com.sophia.project_minji.utillties.Constants
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
 import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
 

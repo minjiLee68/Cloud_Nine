@@ -1,18 +1,13 @@
 package com.sophia.project_minji.viewmodel
 
 import android.net.Uri
-import android.text.TextUtils
 import androidx.lifecycle.*
-import com.sophia.project_minji.adapter.StudentGridAdapter
-import com.sophia.project_minji.adapter.StudentLinearAdapter
-import com.sophia.project_minji.entity.Chat
-import com.sophia.project_minji.entity.FollowUser
-import com.sophia.project_minji.entity.StudentEntity
-import com.sophia.project_minji.entity.User
+import com.sophia.project_minji.dataclass.Chat
+import com.sophia.project_minji.dataclass.FollowUser
+import com.sophia.project_minji.dataclass.StudentEntity
+import com.sophia.project_minji.dataclass.User
 import com.sophia.project_minji.listeners.CallAnotherActivityNavigator
 import com.sophia.project_minji.repository.FbRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
 

@@ -1,4 +1,4 @@
-package com.sophia.project_minji.entity
+package com.sophia.project_minji.dataclass
 
 data class FollowUser(
     var name: String = "",

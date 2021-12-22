@@ -16,7 +16,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_minji">
         <activity
-            android:name="com.sophia.UserPageActivity"
+            android:name=".detailPageFragment"
+            android:exported="false" />
+        <activity
+            android:name=".UserFriendsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".userPage.UserPageActivity"
             android:exported="false" />
         <activity
             android:name=".UserPageActivity"
