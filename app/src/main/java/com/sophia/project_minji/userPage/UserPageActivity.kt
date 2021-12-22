@@ -73,7 +73,6 @@ class UserPageActivity : AppCompatActivity() {
                 followDto.followingCount = 1
                 followDto.followings[userId] = true
                 it.set(followingUser, followDto)
-                viewModel.setFollowUser(userId)
 
                 return@runTransaction
             } else {
@@ -82,10 +81,13 @@ class UserPageActivity : AppCompatActivity() {
                         //언팔로우
                         followingCount -= 1
                         followings.remove(userId)
+                        viewModel.deleteFollowUser(userId)
                     } else {
                         //팔로우
                         followingCount += 1
                         followings[userId] = true
+                        val id = followDto!!.followers.keys.iterator()
+                        viewModel.setFollowUser(id.next())
                     }
                 }
             }
@@ -109,13 +111,13 @@ class UserPageActivity : AppCompatActivity() {
                         //언팔로우
                         followerCount -= 1
                         followers.remove(uid)
+                        viewModel.deleteFollowUser(uid)
                         binding.followBtn.text = "팔로우"
                     } else {
                         //팔로우
                         followerCount += 1
                         followers[uid] = true
-                        val id = followDto!!.followers.keys.iterator()
-                        viewModel.setFollowUser(id.next())
+                        viewModel.setFollowUser(userId)
                         binding.followBtn.text = "언팔로우"
                     }
                 }

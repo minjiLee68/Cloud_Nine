@@ -43,7 +43,6 @@ class FbRepository(context: Context) {
     //사용자 프로필 만들기
     fun setUser(name: String, image: String, navigator: CallAnotherActivityNavigator) {
         val user = User(name, image)
-        val followUser = FollowUser(name, image)
         firestore.collection("Users").document(Uid).set(user)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -54,7 +53,6 @@ class FbRepository(context: Context) {
                     progressBar.visibility = View.VISIBLE
                 }
             }
-        firestore.collection("FollowUser").document(Uid).set(followUser)
     }
 
     //학생정보 데이터베이스에 저장
@@ -200,18 +198,32 @@ class FbRepository(context: Context) {
     }
 
     fun setFollowUser(userId: String) {
-        firestore.collection("Users").document(userId).get()
+        firestore.collection("Users").document(Uid).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     if (task.result!!.exists()) {
                         val name = task.result!!.getString("name")!!
                         val image = task.result!!.getString("image")!!
                         val followUser = FollowUser(name, image, userId)
-                        firestore.collection("Users/$Uid/following").document(userId).set(followUser)
+                        firestore.collection("Users/$Uid/follower").document(userId).set(followUser)
                     }
                 }
             }
     }
+
+//    fun setFollowingUser(userId: String) {
+//        firestore.collection("Users").document(Uid).get()
+//            .addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    if (task.result!!.exists()) {
+//                        val name = task.result!!.getString("name")!!
+//                        val image = task.result!!.getString("image")!!
+//                        val followUser = FollowUser(name, image, userId)
+//                        firestore.collection("Users/$userId/follower").document(userId).set(followUser)
+//                    }
+//                }
+//            }
+//    }
 
     fun getFollowUser(userList: MutableList<FollowUser>): LiveData<List<FollowUser>> {
         val database: FirebaseFirestore = FirebaseFirestore.getInstance()

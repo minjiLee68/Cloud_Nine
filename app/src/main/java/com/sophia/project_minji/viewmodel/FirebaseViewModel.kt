@@ -73,6 +73,10 @@ class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
         return repository.getFollowUserLive()
     }
 
+//    fun setFollowingUser(userId: String) {
+//        repository.setFollowingUser(userId)
+//    }
+
     fun setFollowUser(userId: String) {
         repository.setFollowUser(userId)
     }
