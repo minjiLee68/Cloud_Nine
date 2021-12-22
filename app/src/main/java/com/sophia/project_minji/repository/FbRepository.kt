@@ -57,6 +57,7 @@ class FbRepository(context: Context) {
                     progressBar.visibility = View.VISIBLE
                 }
             }
+        firestore.collection("FollowUser").document(Uid).set(user)
     }
 
     //학생정보 데이터베이스에 저장
@@ -220,6 +221,9 @@ class FbRepository(context: Context) {
         database.collection("FollowUser").addSnapshotListener { value, _ ->
             for (dc: DocumentChange in value!!.documentChanges) {
                 if (dc.type == DocumentChange.Type.ADDED) {
+                    if (Uid == dc.document.id) {
+                        continue
+                    }
                     val user = dc.document.toObject(FollowUser::class.java)
                     val userId = dc.document.id
                     user.name = dc.document.getString("name")!!
@@ -239,14 +243,14 @@ class FbRepository(context: Context) {
     }
 
     fun sendMessage(message: String, time: String, userId: String) {
-        firestore.collection("Users").document(Uid).get()
+        firestore.collection("FollowUser").document(Uid).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     if (task.result!!.exists()) {
                         val name = task.result!!.getString("name")!!
                         val image = task.result!!.getString("image")!!
                         val chats = Chat(message, time, Uid, userId, image)
-                        firestore.collection("Users/$userId/Chats").document().set(chats)
+                        firestore.collection("FollowUser/$userId/Chats").document().set(chats)
                     }
                 }
             }
@@ -256,40 +260,44 @@ class FbRepository(context: Context) {
         userId: String,
         chatMessages: MutableList<Chat>,
     ): LiveData<List<Chat>> {
-        firestore.collection("Users/$userId/Chats")
+        firestore.collection("FollowUser/$userId/Chats")
             .whereEqualTo("sendId", Uid)
             .whereEqualTo("receiverId", userId)
             .addSnapshotListener { value, _ ->
-                for (dc: DocumentChange in value!!.documentChanges) {
-                    if (dc.type == DocumentChange.Type.ADDED) {
-                        val chats = dc.document.toObject(Chat::class.java)
-                        chats.message = dc.document.getString("message")!!
-                        chats.sendId = dc.document.getString("sendId")!!
-                        chats.receiverId = dc.document.getString("receiverId")!!
-                        chats.userProfile = dc.document.getString("userProfile")!!
-                        chats.time = dc.document.getString("time")!!
+                if (value != null) {
+                    for (dc: DocumentChange in value.documentChanges) {
+                        if (dc.type == DocumentChange.Type.ADDED) {
+                            val chats = dc.document.toObject(Chat::class.java)
+                            chats.message = dc.document.getString("message")!!
+                            chats.sendId = dc.document.getString("sendId")!!
+                            chats.receiverId = dc.document.getString("receiverId")!!
+                            chats.userProfile = dc.document.getString("userProfile")!!
+                            chats.time = dc.document.getString("time")!!
 
-                        chatMessages.add(chats)
-                        _chatLive.value = chatMessages
+                            chatMessages.add(chats)
+                            _chatLive.value = chatMessages
+                        }
                     }
                 }
             }
 
-        firestore.collection("Users/$Uid/Chats")
+        firestore.collection("FollowUser/$Uid/Chats")
             .whereEqualTo("sendId", userId)
             .whereEqualTo("receiverId", Uid)
             .addSnapshotListener { value, _ ->
-                for (dc: DocumentChange in value!!.documentChanges) {
-                    if (dc.type == DocumentChange.Type.ADDED) {
-                        val chats = dc.document.toObject(Chat::class.java)
-                        chats.message = dc.document.getString("message")!!
-                        chats.sendId = dc.document.getString("sendId")!!
-                        chats.receiverId = dc.document.getString("receiverId")!!
-                        chats.userProfile = dc.document.getString("userProfile")!!
-                        chats.time = dc.document.getString("time")!!
+                if (value != null) {
+                    for (dc: DocumentChange in value.documentChanges) {
+                        if (dc.type == DocumentChange.Type.ADDED) {
+                            val chats = dc.document.toObject(Chat::class.java)
+                            chats.message = dc.document.getString("message")!!
+                            chats.sendId = dc.document.getString("sendId")!!
+                            chats.receiverId = dc.document.getString("receiverId")!!
+                            chats.userProfile = dc.document.getString("userProfile")!!
+                            chats.time = dc.document.getString("time")!!
 
-                        chatMessages.add(chats)
-                        _chatLive.value = chatMessages
+                            chatMessages.add(chats)
+                            _chatLive.value = chatMessages
+                        }
                     }
                 }
             }
