@@ -37,10 +37,9 @@ class FollowUserAdapter( private val users: ArrayList<User>) : ListAdapter<User,
                 .into(binding.imageProfile)
 
             binding.root.setOnClickListener {
-                val chatIntent = Intent(itemView.context, UserPageActivity::class.java)
-                chatIntent.putExtra("followUserId", user.userId)
-                itemView.context.startActivity(chatIntent)
-                preferenceManager.putString("followUserId", user.userId)
+                val followUserIntent = Intent(itemView.context, UserPageActivity::class.java)
+                followUserIntent.putExtra("followUserId", user.userId)
+                itemView.context.startActivity(followUserIntent)
                 preferenceManager.putString("nickName", user.name)
                 preferenceManager.putString("profile", user.image)
             }

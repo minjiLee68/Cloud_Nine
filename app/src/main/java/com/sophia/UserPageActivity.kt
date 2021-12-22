@@ -24,6 +24,7 @@ class UserPageActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var uid: String
     private lateinit var preferenceManager: PreferenceManager
+    private lateinit var userId: String
 
     private val viewModel by viewModels<FirebaseViewModel> {
         FirebaseViewModelFactory(applicationContext)
@@ -33,6 +34,8 @@ class UserPageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUserPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        userId = intent.getStringExtra("followUserId").toString()
 
         init()
         getFolloerAndFollowing()
@@ -48,7 +51,6 @@ class UserPageActivity : AppCompatActivity() {
     }
 
     private fun detailUser() {
-        val userId = intent.getStringExtra("followUserId").toString()
         firestore.collection("Users").document(userId).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -63,7 +65,6 @@ class UserPageActivity : AppCompatActivity() {
     }
 
     private fun requestFollow() {
-        val userId = preferenceManager.getString("followUserId")
         viewModel.setFollowUser(userId)
         val followingUser = firestore.collection("follow").document(uid)
         firestore.runTransaction {
@@ -81,6 +82,7 @@ class UserPageActivity : AppCompatActivity() {
                         //언팔로우
                         followingCount -= 1
                         followings.remove(userId)
+                        viewModel.deleteFollowUser(userId)
                     } else {
                         //팔로우
                         followingCount += 1
@@ -108,10 +110,12 @@ class UserPageActivity : AppCompatActivity() {
                         //언팔로우
                         followerCount -= 1
                         followers.remove(uid)
+                        binding.followBtn.text = "팔로우"
                     } else {
                         //팔로우
                         followerCount += 1
                         followers[uid] = true
+                        binding.followBtn.text = "언팔로우"
                     }
                 }
             }
@@ -121,7 +125,6 @@ class UserPageActivity : AppCompatActivity() {
     }
 
     private fun getFolloerAndFollowing() {
-        val userId = preferenceManager.getString("userId")
         firestore.collection("follow").document(userId).addSnapshotListener { value, _ ->
             if (value != null) {
                 val followDto = value.toObject(FollowDto::class.java)

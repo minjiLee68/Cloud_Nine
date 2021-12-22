@@ -82,4 +82,8 @@ class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
         repository.setFollowUser(userId)
     }
 
+    fun deleteFollowUser(userId: String) {
+        repository.deleteFollowUser(userId)
+    }
+
 }

@@ -234,6 +234,9 @@ class FbRepository(context: Context) {
         return _followUserLive
     }
 
+    fun deleteFollowUser(userId: String) {
+        firestore.collection("FollowUser").document(userId).delete()
+    }
 
     fun sendMessage(message: String, time: String, userId: String) {
         firestore.collection("Users").document(Uid).get()
