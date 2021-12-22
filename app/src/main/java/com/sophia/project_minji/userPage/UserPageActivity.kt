@@ -2,12 +2,16 @@ package com.sophia.project_minji.userPage
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.getField
 import com.sophia.project_minji.databinding.ActivityUserPageBinding
 import com.sophia.project_minji.dataclass.FollowDto
+import com.sophia.project_minji.dataclass.FollowUser
 import com.sophia.project_minji.utillties.PreferenceManager
 import com.sophia.project_minji.viewmodel.FirebaseViewModel
 import com.sophia.project_minji.viewmodel.FirebaseViewModelFactory
@@ -46,41 +50,6 @@ class UserPageActivity : AppCompatActivity() {
         binding.followBtn.setOnClickListener { requestFollow() }
     }
 
-//    private fun createFragment() {
-//        newFriendsFrag = NewFriendsFragment()
-//    }
-//
-//    private fun createViewPager() {
-//        pagerAdapter = PagerAdapter(childFragmentManager, lifecycle)
-//        pagerAdapter.addFragment(newFriendsFrag)
-//        binding.viewPager2.adapter = pagerAdapter
-//        binding.viewPager2.isUserInputEnabled = false
-//    }
-//
-//    private fun settingTabLayout() {
-//        binding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-//            override fun onTabSelected(tab: TabLayout.Tab?) {
-//                when(tab?.position) {
-//                    0 -> {
-//                        binding.viewPager2.currentItem = 0
-//                    }
-//                    1 -> {
-//                        binding.viewPager2.currentItem = 1
-//                    }
-//                }
-//            }
-//
-//            override fun onTabUnselected(tab: TabLayout.Tab?) {
-//
-//            }
-//
-//            override fun onTabReselected(tab: TabLayout.Tab?) {
-//
-//            }
-//
-//        })
-//    }
-
     private fun detailUser() {
         firestore.collection("Users").document(userId).get()
             .addOnCompleteListener { task ->
@@ -96,7 +65,6 @@ class UserPageActivity : AppCompatActivity() {
     }
 
     private fun requestFollow() {
-        viewModel.setFollowUser(userId)
         val followingUser = firestore.collection("follow").document(uid)
         firestore.runTransaction {
             var followDto = it.get(followingUser).toObject(FollowDto::class.java)
@@ -105,6 +73,7 @@ class UserPageActivity : AppCompatActivity() {
                 followDto.followingCount = 1
                 followDto.followings[userId] = true
                 it.set(followingUser, followDto)
+                viewModel.setFollowUser(userId)
 
                 return@runTransaction
             } else {
@@ -113,7 +82,6 @@ class UserPageActivity : AppCompatActivity() {
                         //언팔로우
                         followingCount -= 1
                         followings.remove(userId)
-                        viewModel.deleteFollowUser(userId)
                     } else {
                         //팔로우
                         followingCount += 1
@@ -146,6 +114,8 @@ class UserPageActivity : AppCompatActivity() {
                         //팔로우
                         followerCount += 1
                         followers[uid] = true
+                        val id = followDto!!.followers.keys.iterator()
+                        viewModel.setFollowUser(id.next())
                         binding.followBtn.text = "언팔로우"
                     }
                 }

@@ -43,6 +43,7 @@ class FbRepository(context: Context) {
     //사용자 프로필 만들기
     fun setUser(name: String, image: String, navigator: CallAnotherActivityNavigator) {
         val user = User(name, image)
+        val followUser = FollowUser(name, image)
         firestore.collection("Users").document(Uid).set(user)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -53,7 +54,7 @@ class FbRepository(context: Context) {
                     progressBar.visibility = View.VISIBLE
                 }
             }
-        firestore.collection("FollowUser").document(Uid).set(user)
+        firestore.collection("FollowUser").document(Uid).set(followUser)
     }
 
     //학생정보 데이터베이스에 저장
@@ -205,8 +206,8 @@ class FbRepository(context: Context) {
                     if (task.result!!.exists()) {
                         val name = task.result!!.getString("name")!!
                         val image = task.result!!.getString("image")!!
-                        val followUser = FollowUser(name, image)
-                        firestore.collection("FollowUser").document(userId).set(followUser)
+                        val followUser = FollowUser(name, image, userId)
+                        firestore.collection("Users/$Uid/following").document(userId).set(followUser)
                     }
                 }
             }
@@ -214,39 +215,42 @@ class FbRepository(context: Context) {
 
     fun getFollowUser(userList: MutableList<FollowUser>): LiveData<List<FollowUser>> {
         val database: FirebaseFirestore = FirebaseFirestore.getInstance()
-        database.collection("FollowUser").addSnapshotListener { value, _ ->
-            for (dc: DocumentChange in value!!.documentChanges) {
-                if (dc.type == DocumentChange.Type.ADDED) {
-                    if (Uid == dc.document.id) {
-                        continue
-                    }
-                    val user = dc.document.toObject(FollowUser::class.java)
-                    val userId = dc.document.id
-                    user.name = dc.document.getString("name")!!
-                    user.image = dc.document.getString("image")!!
-                    user.userId = userId
+        database.collection("Users/$Uid/following")
+            .addSnapshotListener { value, _ ->
+                if (value != null) {
+                    for (dc: DocumentChange in value.documentChanges) {
+                        if (dc.type == DocumentChange.Type.ADDED) {
+                            if (Uid == dc.document.id) {
+                                continue
+                            }
+                            val user = dc.document.toObject(FollowUser::class.java)
+                            val userId = dc.document.id
+                            user.name = dc.document.getString("name")!!
+                            user.image = dc.document.getString("image")!!
+                            user.userId = userId
 
-                    userList.add(user)
-                    _followUserLive.value = userList
+                            userList.add(user)
+                            _followUserLive.value = userList
+                        }
+                    }
                 }
             }
-        }
         return _followUserLive
     }
 
     fun deleteFollowUser(userId: String) {
-        firestore.collection("FollowUser").document(userId).delete()
+        firestore.collection("Users/$Uid/following").document(userId).delete()
     }
 
     fun sendMessage(message: String, time: String, userId: String) {
-        firestore.collection("FollowUser").document(Uid).get()
+        firestore.collection("Users").document(Uid).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     if (task.result!!.exists()) {
                         val name = task.result!!.getString("name")!!
                         val image = task.result!!.getString("image")!!
                         val chats = Chat(message, time, Uid, userId, image)
-                        firestore.collection("FollowUser/$userId/Chats").document().set(chats)
+                        firestore.collection("Users/$userId/Chats").document().set(chats)
                     }
                 }
             }
@@ -256,7 +260,7 @@ class FbRepository(context: Context) {
         userId: String,
         chatMessages: MutableList<Chat>,
     ): LiveData<List<Chat>> {
-        firestore.collection("FollowUser/$userId/Chats")
+        firestore.collection("Users/$userId/Chats")
             .whereEqualTo("sendId", Uid)
             .whereEqualTo("receiverId", userId)
             .addSnapshotListener { value, _ ->
@@ -277,7 +281,7 @@ class FbRepository(context: Context) {
                 }
             }
 
-        firestore.collection("FollowUser/$Uid/Chats")
+        firestore.collection("Users/$Uid/Chats")
             .whereEqualTo("sendId", userId)
             .whereEqualTo("receiverId", Uid)
             .addSnapshotListener { value, _ ->
