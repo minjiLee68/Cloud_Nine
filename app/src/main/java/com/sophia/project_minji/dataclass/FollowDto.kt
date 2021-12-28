@@ -8,4 +8,6 @@ data class FollowDto(
 
     var followingCount: Int = 0,
     var followings: MutableMap<String, Boolean> = HashMap(),
+
+    var follows: MutableList<String> = mutableListOf()
 )

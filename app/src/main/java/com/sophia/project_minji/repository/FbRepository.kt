@@ -197,8 +197,8 @@ class FbRepository(context: Context) {
         return _userLive
     }
 
-    fun setFollowUser(userId: String) {
-        firestore.collection("Users").document(Uid).get()
+    fun setFollowUser(userId: String,followerId: String, followingId: String) {
+        firestore.collection("Users").document(userId).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     if (task.result!!.exists()) {
@@ -227,7 +227,7 @@ class FbRepository(context: Context) {
 
     fun getFollowUser(userList: MutableList<FollowUser>): LiveData<List<FollowUser>> {
         val database: FirebaseFirestore = FirebaseFirestore.getInstance()
-        database.collection("Users/$Uid/following")
+        database.collection("Users/$Uid/follower")
             .addSnapshotListener { value, _ ->
                 if (value != null) {
                     for (dc: DocumentChange in value.documentChanges) {
@@ -251,7 +251,7 @@ class FbRepository(context: Context) {
     }
 
     fun deleteFollowUser(userId: String) {
-        firestore.collection("Users/$Uid/following").document(userId).delete()
+        firestore.collection("Users/$Uid/follower").document(userId).delete()
     }
 
     fun sendMessage(message: String, time: String, userId: String) {
