@@ -86,9 +86,7 @@ class UserPageActivity : AppCompatActivity() {
                         //팔로우
                         followingCount += 1
                         followings[userId] = true
-                        val id = followDto!!.followers.keys.iterator()
-                        viewModel.setFollowUser(id.next())
-                        Log.d("tag",id.next())
+                        viewModel.setFollowingUser(userId)
                     }
                 }
             }
@@ -118,7 +116,6 @@ class UserPageActivity : AppCompatActivity() {
                         //팔로우
                         followerCount += 1
                         followers[uid] = true
-                        viewModel.setFollowUser(uid)
                         binding.followBtn.text = "언팔로우"
                     }
                 }

@@ -197,7 +197,7 @@ class FbRepository(context: Context) {
         return _userLive
     }
 
-    fun setFollowUser(userId: String,followerId: String, followingId: String) {
+    fun setFollowingUser(userId: String) {
         firestore.collection("Users").document(userId).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -205,29 +205,26 @@ class FbRepository(context: Context) {
                         val name = task.result!!.getString("name")!!
                         val image = task.result!!.getString("image")!!
                         val followUser = FollowUser(name, image, userId)
-                        firestore.collection("Users/$Uid/follower").document(userId).set(followUser)
+                        firestore.collection("Users/$Uid/follow").document(userId).set(followUser)
+                    }
+                }
+            }
+        firestore.collection("Users").document(Uid).get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    if (task.result!!.exists()) {
+                        val name = task.result!!.getString("name")!!
+                        val image = task.result!!.getString("image")!!
+                        val followUser = FollowUser(name, image, Uid)
+                        firestore.collection("Users/$userId/follow").document(Uid).set(followUser)
                     }
                 }
             }
     }
 
-//    fun setFollowingUser(userId: String) {
-//        firestore.collection("Users").document(Uid).get()
-//            .addOnCompleteListener { task ->
-//                if (task.isSuccessful) {
-//                    if (task.result!!.exists()) {
-//                        val name = task.result!!.getString("name")!!
-//                        val image = task.result!!.getString("image")!!
-//                        val followUser = FollowUser(name, image, userId)
-//                        firestore.collection("Users/$userId/follower").document(userId).set(followUser)
-//                    }
-//                }
-//            }
-//    }
-
     fun getFollowUser(userList: MutableList<FollowUser>): LiveData<List<FollowUser>> {
         val database: FirebaseFirestore = FirebaseFirestore.getInstance()
-        database.collection("Users/$Uid/follower")
+        database.collection("Users/$Uid/follow")
             .addSnapshotListener { value, _ ->
                 if (value != null) {
                     for (dc: DocumentChange in value.documentChanges) {
@@ -251,7 +248,7 @@ class FbRepository(context: Context) {
     }
 
     fun deleteFollowUser(userId: String) {
-        firestore.collection("Users/$Uid/follower").document(userId).delete()
+        firestore.collection("Users/$Uid/follow").document(userId).delete()
     }
 
     fun sendMessage(message: String, time: String, userId: String) {
