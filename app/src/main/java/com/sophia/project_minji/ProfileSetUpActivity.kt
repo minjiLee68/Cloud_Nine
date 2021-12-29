@@ -91,7 +91,7 @@ class ProfileSetUpActivity : AppCompatActivity(), CallAnotherActivityNavigator {
     }
 
     private fun circleImageClick() {
-        binding.profile.setOnClickListener {
+        binding.changeProfile.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             intent.putExtra("crop", true)

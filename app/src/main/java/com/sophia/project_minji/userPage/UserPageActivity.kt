@@ -57,7 +57,13 @@ class UserPageActivity : AppCompatActivity() {
                     if (task.result!!.exists()) {
                         val name = task.result!!.getString("name")
                         val image = task.result!!.getString("image")
+                        val school = task.result!!.getString("school")
+                        val introduce = task.result!!.getString("introduce")
+                        val webSite = task.result!!.getString("webSite")
                         binding.nickName.text = name
+                        binding.tvUserSchool.text = school
+                        binding.tvUserIntroduece.text = introduce
+                        binding.tvUserWebSite.text = webSite
                         Glide.with(applicationContext).load(image).into(binding.myProfile)
                     }
                 }

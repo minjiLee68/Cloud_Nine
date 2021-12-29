@@ -109,6 +109,94 @@
         app:layout_constraintStart_toEndOf="@id/my_profile"
         app:layout_constraintTop_toBottomOf="@id/following" />
 
-    
+    <TextView
+        android:id="@+id/user_school"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:text="학교"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_background" />
+
+    <TextView
+        android:id="@+id/tv_user_school"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:text="school"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/user_school"
+        app:layout_constraintTop_toBottomOf="@id/user_school" />
+
+    <View
+        android:id="@+id/view_1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/Gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_user_school" />
+
+    <TextView
+        android:id="@+id/user_introduce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text="소개"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_1" />
+
+    <TextView
+        android:id="@+id/tv_user_introduece"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:text="introduce"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/user_introduce"
+        app:layout_constraintTop_toBottomOf="@id/user_introduce" />
+
+    <View
+        android:id="@+id/view_2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/Gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_user_introduece" />
+
+
+    <TextView
+        android:id="@+id/user_webSite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text="웹사이트"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_2" />
+
+    <TextView
+        android:id="@+id/tv_user_webSite"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:text="introduce"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/user_webSite"
+        app:layout_constraintTop_toBottomOf="@id/user_webSite" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
