@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.sophia.project_minji.IntroduceFragment
 import com.sophia.project_minji.ProfileSetUpActivity
 import com.sophia.project_minji.adapter.PagerAdapter
 import com.sophia.project_minji.databinding.MypageFragmentBinding
@@ -37,6 +38,7 @@ class MyPageFragment : Fragment() {
     }
 
     private lateinit var newFriendsFrag: NewFriendsFragment
+    private lateinit var introduceFrag: IntroduceFragment
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,11 +71,13 @@ class MyPageFragment : Fragment() {
 
     private fun createFragment() {
         newFriendsFrag = NewFriendsFragment()
+        introduceFrag = IntroduceFragment()
     }
 
     private fun createViewPager() {
         pagerAdapter = PagerAdapter(childFragmentManager, lifecycle)
         pagerAdapter.addFragment(newFriendsFrag)
+        pagerAdapter.addFragment(introduceFrag)
         binding.viewPager2.adapter = pagerAdapter
         binding.viewPager2.isUserInputEnabled = false
     }
@@ -81,7 +85,7 @@ class MyPageFragment : Fragment() {
     private fun settingTabLayout() {
         binding.tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                when(tab?.position) {
+                when (tab?.position) {
                     0 -> {
                         binding.viewPager2.currentItem = 0
                     }
@@ -136,7 +140,6 @@ class MyPageFragment : Fragment() {
             }
         }
     }
-
 
 
     override fun onDestroyView() {

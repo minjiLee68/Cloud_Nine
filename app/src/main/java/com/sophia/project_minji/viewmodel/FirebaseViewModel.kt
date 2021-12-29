@@ -11,17 +11,20 @@ import com.sophia.project_minji.repository.FbRepository
 
 class FirebaseViewModel(private val repository: FbRepository) : ViewModel() {
 
-    fun setUser(name: String, image: String, navigator: CallAnotherActivityNavigator) {
-        repository.setUser(name, image, navigator)
-    }
+//    fun setUser(name: String, image: String, navigator: CallAnotherActivityNavigator) {
+//        repository.setUser(name, image, navigator)
+//    }
 
     fun userProfile(
         name: String,
+        school: String,
+        introduce: String,
+        webSite: String,
         isPhotoSelected: Boolean,
         mImageUri: Uri,
         navigator: CallAnotherActivityNavigator
     ) {
-        repository.userProfile(name, isPhotoSelected, mImageUri, navigator)
+        repository.userProfile(name,school,introduce,webSite,isPhotoSelected, mImageUri, navigator)
     }
 
     fun register(

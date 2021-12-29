@@ -28,7 +28,6 @@ class ProfileSetUpActivity : AppCompatActivity(), CallAnotherActivityNavigator {
 
     private lateinit var binding: ActivityProfileSetUpBinding
     private lateinit var mImageUri: Uri
-    private lateinit var downloadUri: Uri
     private var isPhotoSelected: Boolean = false
 
     private lateinit var storageReference: StorageReference
@@ -66,7 +65,13 @@ class ProfileSetUpActivity : AppCompatActivity(), CallAnotherActivityNavigator {
                     if (task.result!!.exists()) {
                         val name = task.result!!.getString("name")
                         val image = task.result!!.getString("image")
-                        binding.nickName.setText(name)
+                        val school = task.result!!.getString("school")
+                        val introduce = task.result!!.getString("introduce")
+                        val webSite = task.result!!.getString("webSite")
+                        binding.etUserName.setText(name)
+                        binding.etUserSchool.setText(school)
+                        binding.etUserIntroduce.setText(introduce)
+                        binding.etUserWebSite.setText(webSite)
                         mImageUri = Uri.parse(image)
                         Glide.with(this).load(image).into(binding.profile)
                     }
@@ -77,43 +82,13 @@ class ProfileSetUpActivity : AppCompatActivity(), CallAnotherActivityNavigator {
     private fun saveBtnClick() {
         binding.save.setOnClickListener {
             binding.progressBar.visibility = View.VISIBLE
-            viewmodel.userProfile(binding.nickName.text.toString(), isPhotoSelected, mImageUri, this)
-//            binding.progressBar.visibility = View.VISIBLE
-//            val name = binding.nickName.text.toString()
-//            val imageRef = storageReference.child("Profile_pics").child("$Uid.jpg")
-//            if (isPhotoSelected) {
-//                if (name.isNotEmpty()) {
-//                    val images = storageReference.child("Profile").child("$name.jpg")
-//                    images.putFile(mImageUri).addOnCompleteListener { task ->
-//                        if (task.isSuccessful) {
-//                            saveToFireStore(task, name, images)
-//                        } else {
-//                            Toast.makeText(this, task.exception?.message, Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
-//                } else {
-//                    Toast.makeText(this, "사진을 선택하고 이름을 적어주세요.", Toast.LENGTH_SHORT).show()
-//                }
-//            } else {
-//                saveToFireStore(null, name, imageRef)
-//            }
+            val userName = binding.etUserName.text.toString()
+            val userSchool = binding.etUserSchool.text.toString()
+            val introduce = binding.etUserIntroduce.text.toString()
+            val webSite = binding.etUserWebSite.text.toString()
+            viewmodel.userProfile(userName,userSchool,introduce,webSite,isPhotoSelected, mImageUri, this)
         }
     }
-
-//    private fun saveToFireStore(
-//        task: Task<UploadTask.TaskSnapshot>?,
-//        name: String,
-//        imageRef: StorageReference
-//    ) {
-//        if (task != null) {
-//            imageRef.downloadUrl.addOnSuccessListener {
-//                downloadUri = it
-//            }
-//        } else {
-//            downloadUri = mImageUri
-//        }
-//        viewmodel.setUser(name, downloadUri.toString(), this)
-//    }
 
     private fun circleImageClick() {
         binding.profile.setOnClickListener {

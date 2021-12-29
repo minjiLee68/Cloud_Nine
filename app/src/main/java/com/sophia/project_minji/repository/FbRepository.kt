@@ -41,8 +41,15 @@ class FbRepository(context: Context) {
     fun getChatLive(): LiveData<List<Chat>> = _chatLive
 
     //사용자 프로필 만들기
-    fun setUser(name: String, image: String, navigator: CallAnotherActivityNavigator) {
-        val user = User(name, image)
+    private fun setUser(
+        name: String,
+        image: String,
+        school: String,
+        introduce: String,
+        webSite: String,
+        navigator: CallAnotherActivityNavigator
+    ) {
+        val user = User(name, image, school, introduce, webSite)
         firestore.collection("Users").document(Uid).set(user)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -87,6 +94,9 @@ class FbRepository(context: Context) {
 
     fun userProfile(
         name: String,
+        school: String,
+        introduce: String,
+        webSite: String,
         isPhotoSelected: Boolean,
         mImageUri: Uri,
         navigator: CallAnotherActivityNavigator
@@ -99,14 +109,14 @@ class FbRepository(context: Context) {
                     if (task.isSuccessful) {
                         imageRef.downloadUrl.addOnSuccessListener { uri ->
                             downloadUri = uri
-                            setUser(name, downloadUri.toString(), navigator)
+                            setUser(name, downloadUri.toString(), school, introduce, webSite,navigator)
                         }
                     }
                 }
             }
         } else {
             downloadUri = mImageUri
-            setUser(name, downloadUri.toString(), navigator)
+            setUser(name,downloadUri.toString(),school, introduce, webSite,navigator)
         }
     }
 

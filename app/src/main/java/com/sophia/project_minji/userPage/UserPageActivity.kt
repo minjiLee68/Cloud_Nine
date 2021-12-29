@@ -116,6 +116,7 @@ class UserPageActivity : AppCompatActivity() {
                         //팔로우
                         followerCount += 1
                         followers[uid] = true
+                        viewModel.setFollowingUser(userId)
                         binding.followBtn.text = "언팔로우"
                     }
                 }

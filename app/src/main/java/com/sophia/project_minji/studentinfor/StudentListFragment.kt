@@ -35,8 +35,6 @@ class StudentListFragment : Fragment(), OnItemClickListener {
     private lateinit var linearAdapter: StudentLinearAdapter
     private lateinit var gridAdapter: StudentGridAdapter
     private var studentList: MutableList<StudentEntity> = mutableListOf()
-    private var searchList: MutableList<StudentEntity> = mutableListOf()
-
     private lateinit var preferenceManager: PreferenceManager
 
     private val viewModel by viewModels<FirebaseViewModel> {
@@ -73,17 +71,6 @@ class StudentListFragment : Fragment(), OnItemClickListener {
         gridAdapter = StudentGridAdapter(studentList, viewModel, this)
     }
 
-    fun search(searchWord: String, option: String) {
-        firestore.collection("Students").addSnapshotListener { value, error ->
-            for (snapshot in value!!.documents) {
-                if (snapshot.getString(option)!!.contains(searchWord)) {
-                    val item = snapshot.toObject(StudentEntity::class.java)!!
-                    searchList.add(item)
-                }
-            }
-        }
-    }
-
     private fun loadUserDetails() {
         firestore.collection("Users").document(uid).get()
             .addOnCompleteListener { task ->
@@ -94,11 +81,6 @@ class StudentListFragment : Fragment(), OnItemClickListener {
                     }
                 }
             }
-        binding.profile.setOnClickListener {
-            val intent =
-                Intent(requireContext().applicationContext, ProfileSetUpActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     private fun imageButtonClick() {
