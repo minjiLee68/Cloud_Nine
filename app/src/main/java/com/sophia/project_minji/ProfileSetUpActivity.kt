@@ -81,6 +81,7 @@ class ProfileSetUpActivity : AppCompatActivity(), CallAnotherActivityNavigator {
 
     private fun saveBtnClick() {
         binding.save.setOnClickListener {
+            binding.save.visibility = View.INVISIBLE
             binding.progressBar.visibility = View.VISIBLE
             val userName = binding.etUserName.text.toString()
             val userSchool = binding.etUserSchool.text.toString()
